@@ -554,11 +554,11 @@ public class DayNightCycle : MonoBehaviour
             public float minFlareSize;
             public float maxFlareFalloff;
             public float minFlareFalloff;
-            public Color peakFlareTint;
-            public Color peakSurfaceTint;
             public Color sunRiseFlareTint;
+            public Color peakFlareTint;
             public Color sunSetFlareTint;
             public Color sunRiseSurfaceTint;
+            public Color peakSurfaceTint;
             public Color sunSetSurfaceTint;
 
         }
@@ -567,8 +567,8 @@ public class DayNightCycle : MonoBehaviour
         {
             public float maxIntensity;
             public float minIntensity;
-            public Color peakEmissionColor;
             public Color sunRiseEmissionColor;
+            public Color peakEmissionColor;
             public Color sunSetEmissionColor;
 
         }
@@ -584,15 +584,10 @@ public class DayNightCycle : MonoBehaviour
             public Color dayZenithTint;
             public Color nightZenithTint;
             
-            public Color dayHorizonTint;
-            public Color nightHorizonTint;
             public Color sunRiseHorizonTint;
+            public Color dayHorizonTint;
             public Color sunSetHorizonTint;
-
-            public Color dayScattering;
-            public Color nightScattering;
-            public Color sunRiseScattering;
-            public Color sunSetScattering;
+            public Color nightHorizonTint;
         }
     }
 
@@ -607,10 +602,10 @@ public class DayNightCycle : MonoBehaviour
             public float minAmbientDimmer;
             public float maxLightDimmer;
             public float minLightDimmer;
-            public Color dayScatteringTint;
-            public Color nightScatteringTint;
             public Color sunRiseScatteringTint;
+            public Color dayScatteringTint;
             public Color sunSetScatteringTint;
+            public Color nightScatteringTint;
         }
     }
 }
