@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 48.581917, g: 19.182161, b: 8.315293, a: 1}
+  m_IndirectSpecularColor: {r: 0.009036987, g: 0.006268305, b: 0.0051755314, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -176,7 +176,7 @@ MonoBehaviour:
   sky: {fileID: 0}
   clouds: {fileID: 0}
   ocean: {fileID: 2081138439}
-  CONFIG:
+  config:
     startTime:
       hour: 0
       minute: 0
@@ -192,61 +192,61 @@ MonoBehaviour:
     sunLight:
       celestialBody:
         maxAngularDiameter: 1
-        minAngularDiameter: 0.5
+        minAngularDiameter: 0.9
         maxFlareSize: 1
         minFlareSize: 0
         maxFlareFalloff: 1
         minFlareFalloff: 0
-        sunRiseFlareTint: {r: 0.8962264, g: 0.7741738, b: 0.6059392, a: 1}
+        sunRiseFlareTint: {r: 1, g: 0.9025157, b: 0.9025157, a: 1}
         peakFlareTint: {r: 1, g: 1, b: 1, a: 1}
-        sunSetFlareTint: {r: 0.8584906, g: 0.6495958, b: 0.3779518, a: 1}
-        sunRiseSurfaceTint: {r: 1, g: 0.9191179, b: 0.81761, a: 1}
+        sunSetFlareTint: {r: 1, g: 0.9241022, b: 0.71383643, a: 1}
+        sunRiseSurfaceTint: {r: 1, g: 0.5647059, b: 0.53333336, a: 1}
         peakSurfaceTint: {r: 1, g: 1, b: 1, a: 1}
-        sunSetSurfaceTint: {r: 0.81960785, g: 0.31151202, b: 0.25098035, a: 1}
+        sunSetSurfaceTint: {r: 1, g: 0.5634985, b: 0.53459114, a: 1}
       lightEmission:
         maxIntensity: 10000
-        minIntensity: 8000
-        sunRiseEmissionColor: {r: 1, g: 0.83939314, b: 0.49685526, a: 1}
+        minIntensity: 5000
+        sunRiseEmissionColor: {r: 1, g: 0.90196085, b: 0.90196085, a: 1}
         peakEmissionColor: {r: 1, g: 1, b: 1, a: 1}
-        sunSetEmissionColor: {r: 1, g: 0.3799598, b: 0.27987415, a: 1}
+        sunSetEmissionColor: {r: 1, g: 0.5647059, b: 0.53333336, a: 1}
     moonLight:
       celestialBody:
-        maxAngularDiameter: 0.7
-        minAngularDiameter: 0.3
-        maxFlareSize: 0.5
+        maxAngularDiameter: 0.5
+        minAngularDiameter: 0.4
+        maxFlareSize: 1
         minFlareSize: 0
-        maxFlareFalloff: 0.5
+        maxFlareFalloff: 1
         minFlareFalloff: 0
-        sunRiseFlareTint: {r: 0.8088584, g: 0.8730497, b: 0.8962264, a: 1}
-        peakFlareTint: {r: 1, g: 1, b: 1, a: 1}
-        sunSetFlareTint: {r: 0.75827694, g: 0.8490566, b: 0.8463104, a: 1}
-        sunRiseSurfaceTint: {r: 0.9150943, g: 0.91143894, b: 0.86041886, a: 1}
-        peakSurfaceTint: {r: 1, g: 0.9771775, b: 0.81761, a: 1}
-        sunSetSurfaceTint: {r: 0.8584906, g: 0.8461345, b: 0.76670223, a: 1}
+        sunRiseFlareTint: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
+        peakFlareTint: {r: 0.85534585, g: 1, b: 0.97710925, a: 1}
+        sunSetFlareTint: {r: 0.8207547, g: 0.8207547, b: 0.8207547, a: 1}
+        sunRiseSurfaceTint: {r: 0.81960785, g: 0.81960785, b: 0.81960785, a: 1}
+        peakSurfaceTint: {r: 1, g: 1, b: 1, a: 1}
+        sunSetSurfaceTint: {r: 0.81960785, g: 0.81960785, b: 0.81960785, a: 1}
       lightEmission:
-        maxIntensity: 2000
-        minIntensity: 500
-        sunRiseEmissionColor: {r: 0.8742138, g: 1, b: 0.98103225, a: 1}
-        peakEmissionColor: {r: 0.60062885, g: 1, b: 0.9920284, a: 1}
-        sunSetEmissionColor: {r: 0.7987421, g: 1, b: 0.9928122, a: 1}
+        maxIntensity: 50
+        minIntensity: 10
+        sunRiseEmissionColor: {r: 0.1981132, g: 0.1981132, b: 0.1981132, a: 1}
+        peakEmissionColor: {r: 0.066037714, g: 0.040287156, b: 0.06332714, a: 1}
+        sunSetEmissionColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     sky:
       artisticOverrides:
-        dayZenithTint: {r: 1, g: 0.99398744, b: 0.8930817, a: 1}
-        nightZenithTint: {r: 0.78930813, g: 1, b: 0.99176455, a: 1}
-        sunRiseHorizonTint: {r: 0.7075472, g: 0.20469916, b: 0.20469916, a: 1}
-        dayHorizonTint: {r: 1, g: 1, b: 1, a: 1}
-        sunSetHorizonTint: {r: 0.83137256, g: 0.4275534, b: 0.29803923, a: 1}
-        nightHorizonTint: {r: 0.7232704, g: 0.97005814, b: 1, a: 1}
+        dayZenithTint: {r: 1, g: 0.9213398, b: 0.70440245, a: 1}
+        nightZenithTint: {r: 1, g: 0.9902866, b: 0.7987421, a: 1}
+        sunRiseHorizonTint: {r: 0.5754717, g: 0.4759404, b: 0.4759404, a: 1}
+        dayHorizonTint: {r: 1, g: 1, b: 1, a: 0}
+        sunSetHorizonTint: {r: 0.5764706, g: 0.5488492, b: 0.47843137, a: 1}
+        nightHorizonTint: {r: 0.122641504, g: 0.122641504, b: 0.122641504, a: 1}
     cloud:
       lighting:
         maxAmbientDimmer: 1
         minAmbientDimmer: 0
         maxLightDimmer: 1
         minLightDimmer: 0
-        sunRiseScatteringTint: {r: 1, g: 0.29874206, b: 0.29874206, a: 1}
-        dayScatteringTint: {r: 1, g: 1, b: 1, a: 1}
-        sunSetScatteringTint: {r: 0.8679245, g: 0.47131872, b: 0.16921791, a: 1}
-        nightScatteringTint: {r: 0.1981132, g: 0.12833747, b: 0.16728204, a: 1}
+        sunRiseScatteringTint: {r: 0.7490196, g: 0.6666667, b: 0.61960787, a: 1}
+        dayScatteringTint: {r: 1, g: 1, b: 1, a: 0}
+        sunSetScatteringTint: {r: 0.7490196, g: 0.66501415, b: 0.61960787, a: 1}
+        nightScatteringTint: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &128746227
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,7 +313,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &845006293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -447,7 +447,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.18039216, g: 0.14509805, b: 0.16067244, a: 1}
+  m_Color: {r: 0.09433961, g: 0.089592956, b: 0.09170258, a: 1}
   m_Intensity: 10
   m_Range: 10
   m_SpotAngle: 30
@@ -505,14 +505,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 845006292}
-  m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 90, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1159960410
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,7 +599,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1159960410}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 10, z: -10}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -822,14 +822,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1417021161}
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: -0.7071068}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 270, y: 0, z: 0}
 --- !u!114 &1417021164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -989,7 +989,7 @@ MonoBehaviour:
   cpuEvaluateRipples: 0
   timeMultiplier: 1
   repetitionSize: 500
-  largeWindSpeed: 50
+  largeWindSpeed: 10
   largeWindOrientationValue: 0
   largeCurrentSpeedValue: 3
   largeCurrentOrientationValue: 90
@@ -1003,7 +1003,7 @@ MonoBehaviour:
   largeBand1FadeStart: 300
   largeBand1FadeDistance: 800
   ripples: 1
-  ripplesWindSpeed: 5
+  ripplesWindSpeed: 2
   ripplesWindOrientationMode: 0
   ripplesWindOrientationValue: 32.71
   ripplesCurrentMode: 0

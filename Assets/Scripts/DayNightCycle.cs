@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
-using static DayNightCycle;
 
 public class DayNightCycle : MonoBehaviour
 {
@@ -25,9 +24,9 @@ public class DayNightCycle : MonoBehaviour
     public VolumetricClouds clouds;
     public WaterSurface ocean;
 
-    public DayNightConfig CONFIG;
+    public DayNightConfig config;
+    public ConfigControl configSample;
 
-    private ConfigControl _config;
     private HDAdditionalLightData _sunData;
     private HDAdditionalLightData _moonData;
     private Transform _sunTransform;
@@ -36,6 +35,8 @@ public class DayNightCycle : MonoBehaviour
 
     private float _tSunRise;
     private float _tSunSet;
+
+    private GUIStyle _style = new GUIStyle();
 
     private void Awake()
     {
@@ -46,6 +47,10 @@ public class DayNightCycle : MonoBehaviour
         _sunTransform = sunLight.transform;
         _moonTransform = moonLight.transform;
         _overrideWindSpeed = new WindSpeedParameter.WindParamaterValue();
+
+        _style.fontSize = 20;
+        _style.normal.textColor = Color.white;
+        _style.normal.background = Texture2D.grayTexture;
 
         onSunRise += OnSunRise;
         onSunSet += OnSunSet;
@@ -59,10 +64,8 @@ public class DayNightCycle : MonoBehaviour
 
     private void Start()
     {
-        
         Setup();
-
-        float t = (float)currentTick / OneDayTime.TotalTicks;
+        float t = ((float)currentTick % OneDayTime.TotalTicks) / OneDayTime.TotalTicks;
         Evaluate(t);
     }
 
@@ -79,6 +82,16 @@ public class DayNightCycle : MonoBehaviour
         currentTick %= OneDayTime.TotalTicks;
     }
 
+    private void OnGUI()
+    {
+        OneDayTime time = OneDayTime.ToOneDayTime(currentTick);
+        GUI.Label(new Rect(0f, 0f, 500f, 200f), $"SunRise: {config.sunRiseTime} | Sunset:{config.sunSetTime}\n" +
+            $"Time (t): {time} ({((float)currentTick % OneDayTime.TotalTicks) / OneDayTime.TotalTicks})\n" +
+            $"SecondsPerRealSecond: {gameSecondPerRealSecond}\n" +
+            $"Sun : {(_moonTransform.gameObject.activeInHierarchy ? "Active" : "Inactive")} ({(int)_sunTransform.eulerAngles.x} degrees, facing {_sunTransform.forward})\n" +
+            $"Moon: {(_moonTransform.gameObject.activeInHierarchy ? "Active" : "Inactive")} ({(int)_moonTransform.eulerAngles.x} degrees, facing {_moonTransform.forward})\n", _style);
+    }
+
     public void Evaluate(float t)
     {
         EvaluateLight(t);
@@ -88,71 +101,71 @@ public class DayNightCycle : MonoBehaviour
 
     public void EvaluateLight(float t)
     {
-        if(t > _tSunSet && isDayTime)
+        if((t >= _tSunRise && t <= _tSunSet) && !isDayTime)
         {
-            _sunTransform.gameObject.SetActive(false);
-            _moonTransform.gameObject.SetActive(true);
-            isDayTime = false;
-            onSunSet?.Invoke(currentTick);
-        }
-        else if (t > _tSunRise && !isDayTime)
-        {
-            _sunTransform.gameObject.SetActive(true);
-            _moonTransform.gameObject.SetActive(false);
+            //_sunTransform.gameObject.SetActive(true);
+            //_moonTransform.gameObject.SetActive(false);
             isDayTime = true;
             onSunRise?.Invoke(currentTick);
         }
-        _sunTransform.rotation  = Quaternion.AngleAxis(t * 360f + 180f + 90f, Vector3.right);
-        _moonTransform.rotation = Quaternion.AngleAxis(t * 360f + 90f       , Vector3.right);
+        else if ((t < _tSunRise || t > _tSunSet) && isDayTime)
+        {
+            //_sunTransform.gameObject.SetActive(false);
+            //_moonTransform.gameObject.SetActive(true);
+            isDayTime = false;
+            onSunSet?.Invoke(currentTick);
+        }
+        _sunTransform.rotation  = Quaternion.AngleAxis(-90f, Vector3.up) * Quaternion.AngleAxis(t * 360f + 180f + 90f, Vector3.right);
+        _moonTransform.rotation = Quaternion.AngleAxis(-90f, Vector3.up) * Quaternion.AngleAxis(t * 360f + 90f       , Vector3.right);
 
         if(isDayTime)
         {
-            var celes = CONFIG.sunLight.celestialBody;
-            _sunData.angularDiameter    = Mathf.Clamp(_config.sunAngularDiameter.Evaluate(t) * celes.maxAngularDiameter, celes.minAngularDiameter, celes.maxAngularDiameter);
-            _sunData.flareSize          = Mathf.Clamp(_config.sunFlareSize.Evaluate(t) * celes.maxFlareSize, celes.minFlareSize, celes.maxFlareSize);
-            _sunData.flareFalloff       = Mathf.Clamp(_config.sunFlareFalloff.Evaluate(t) * celes.maxFlareFalloff, celes.minFlareFalloff, celes.maxFlareFalloff);
-            _sunData.flareTint          = _config.sunFlareTint.Evaluate(t);
-            _sunData.surfaceTint        = _config.sunSurfaceTint.Evaluate(t);
+            var celes = config.sunLight.celestialBody;
+            _sunData.angularDiameter    = Mathf.Clamp(configSample.sunAngularDiameter.Evaluate(t) * celes.maxAngularDiameter, celes.minAngularDiameter, celes.maxAngularDiameter);
+            _sunData.flareSize          = Mathf.Clamp(configSample.sunFlareSize.Evaluate(t) * celes.maxFlareSize, celes.minFlareSize, celes.maxFlareSize);
+            _sunData.flareFalloff       = Mathf.Clamp(configSample.sunFlareFalloff.Evaluate(t) * celes.maxFlareFalloff, celes.minFlareFalloff, celes.maxFlareFalloff);
+            _sunData.flareTint          = configSample.sunFlareTint.Evaluate(t);
+            _sunData.surfaceTint        = configSample.sunSurfaceTint.Evaluate(t);
 
-            var emis = CONFIG.sunLight.lightEmission;
-            _sunData.color      = _config.sunEmissionColor.Evaluate(t);
-            _sunData.intensity  = Mathf.Clamp(_config.sunIntensity.Evaluate(t) * emis.maxIntensity, emis.minIntensity, emis.maxIntensity);
+            var emis = config.sunLight.lightEmission;
+            _sunData.color      = configSample.sunEmissionColor.Evaluate(t);
+            _sunData.intensity  = Mathf.Clamp(configSample.sunIntensity.Evaluate(t) * emis.maxIntensity, emis.minIntensity, emis.maxIntensity);
         }
         else
         {
-            var celes = CONFIG.moonLight.celestialBody;
-            _moonData.angularDiameter   = Mathf.Clamp(_config.moonAngularDiameter.Evaluate(t) * celes.maxAngularDiameter, celes.minAngularDiameter, celes.maxAngularDiameter);
-            _moonData.flareSize         = Mathf.Clamp(_config.moonFlareSize.Evaluate(t) * celes.maxFlareSize, celes.minFlareSize, celes.maxFlareSize);
-            _moonData.flareFalloff      = Mathf.Clamp(_config.moonFlareFalloff.Evaluate(t) * celes.maxFlareFalloff, celes.minFlareFalloff, celes.maxFlareFalloff);
-            _moonData.flareTint         = _config.moonFlareTint.Evaluate(t);
-            _moonData.surfaceTint       = _config.moonSurfaceTint.Evaluate(t);
+            var celes = config.moonLight.celestialBody;
+            _moonData.angularDiameter   = Mathf.Clamp(configSample.moonAngularDiameter.Evaluate(t) * celes.maxAngularDiameter, celes.minAngularDiameter, celes.maxAngularDiameter);
+            _moonData.flareSize         = Mathf.Clamp(configSample.moonFlareSize.Evaluate(t) * celes.maxFlareSize, celes.minFlareSize, celes.maxFlareSize);
+            _moonData.flareFalloff      = Mathf.Clamp(configSample.moonFlareFalloff.Evaluate(t) * celes.maxFlareFalloff, celes.minFlareFalloff, celes.maxFlareFalloff);
+            _moonData.flareTint         = configSample.moonFlareTint.Evaluate(t);
+            _moonData.surfaceTint       = configSample.moonSurfaceTint.Evaluate(t);
 
-            var emis = CONFIG.moonLight.lightEmission;
-            _moonData.color     = _config.moonEmissionColor.Evaluate(t);
-            _moonData.intensity = Mathf.Clamp(_config.moonIntensity.Evaluate(t) * emis.maxIntensity, emis.minIntensity, emis.maxIntensity);
+            var emis = config.moonLight.lightEmission;
+            _moonData.color     = configSample.moonEmissionColor.Evaluate(t);
+            _moonData.intensity = Mathf.Clamp(configSample.moonIntensity.Evaluate(t) * emis.maxIntensity, emis.minIntensity, emis.maxIntensity);
         }
     }
     public void EvaluateSky(float t)
     {
-        sky.horizonTint.value   = _config.skyHorizonTint.Evaluate(t);
-        sky.zenithTint.value    = _config.skyZenithTint.Evaluate(t);
+        sky.horizonTint.value   = configSample.skyHorizonTint.Evaluate(t);
+        sky.zenithTint.value    = configSample.skyZenithTint.Evaluate(t);
     }
     public void EvaluateClouds(float t)
     {
-        var light = CONFIG.cloud.lighting;
-        clouds.ambientLightProbeDimmer.value    = Mathf.Clamp(_config.cloudAmbientDimmer.Evaluate(t) * light.minAmbientDimmer, light.minAmbientDimmer, light.maxAmbientDimmer);
-        clouds.sunLightDimmer.value             = Mathf.Clamp(_config.cloudLightDimmer.Evaluate(t) * light.minLightDimmer, light.minLightDimmer, light.maxLightDimmer);
-        clouds.scatteringTint.value             = _config.cloudScatteringTint.Evaluate(t);
+        var light = config.cloud.lighting;
+        clouds.ambientLightProbeDimmer.value    = Mathf.Clamp(configSample.cloudAmbientDimmer.Evaluate(t) * light.maxAmbientDimmer, light.minAmbientDimmer, light.maxAmbientDimmer);
+        clouds.sunLightDimmer.value             = Mathf.Clamp(configSample.cloudLightDimmer.Evaluate(t) * light.maxLightDimmer, light.minLightDimmer, light.maxLightDimmer);
+        clouds.scatteringTint.value             = configSample.cloudScatteringTint.Evaluate(t);
     }
     public void Setup()
     {
         // Setup Timings
-        _tSunRise   = (float)CONFIG.sunRiseTime.ToTicks() / OneDayTime.TotalTicks;
-        _tSunSet    = (float)CONFIG.sunSetTime.ToTicks() / OneDayTime.TotalTicks;
-        currentTick = CONFIG.startTime.ToTicks();
+        _tSunRise   = (float)config.sunRiseTime.ToTicks() / OneDayTime.TotalTicks;
+        _tSunSet    = (float)config.sunSetTime.ToTicks() / OneDayTime.TotalTicks;
+        currentTick = config.startTime.ToTicks();
 
-        if (currentTick > CONFIG.sunRiseTime.ToTicks() && 
-            currentTick < CONFIG.sunSetTime.ToTicks())
+        if (currentTick >= config.sunRiseTime.ToTicks() && 
+            currentTick <= config.sunSetTime.ToTicks())
         {
             isDayTime = true;
         }
@@ -161,11 +174,12 @@ public class DayNightCycle : MonoBehaviour
             isDayTime = false;
         }
 
-        _config = new ConfigControl();
-        _config.SetupSun    (CONFIG.sunLight, _tSunRise, _tSunSet);
-        _config.SetupMoon   (CONFIG.moonLight, _tSunRise, _tSunSet);
-        _config.SetupSky    (CONFIG.sky, _tSunRise, _tSunSet);
-        _config.SetupCloud  (CONFIG.cloud, _tSunRise, _tSunSet);
+        // Setup Configs
+        configSample = new ConfigControl();
+        configSample.SetupSun    (config.sunLight, _tSunRise, _tSunSet);
+        configSample.SetupMoon   (config.moonLight, _tSunRise, _tSunSet);
+        configSample.SetupSky    (config.sky, _tSunRise, _tSunSet);
+        configSample.SetupCloud  (config.cloud, _tSunRise, _tSunSet);
     }
 
     private void OnSunSet(long ticks)
@@ -194,6 +208,10 @@ public class DayNightCycle : MonoBehaviour
         public long ToTicks()
         {
             return hour * TicksPerHour + minute * TicksPerMinute + second * TicksPerSecond;
+        }
+        public override string ToString()
+        {
+            return $"{hour}:{minute}:{second}";
         }
         public static OneDayTime ToOneDayTime(long ticks)
         {
@@ -240,13 +258,13 @@ public class DayNightCycle : MonoBehaviour
             float[] ts = new float[]
             {
                 0f,
-                Mathf.Clamp(tSunRise - 0.05f, 0.1f, 0.25f),
+                Mathf.Clamp(tSunRise - 0.05f, 0.0f, 1.0f),
                 tSunRise,
-                Mathf.Clamp(tSunRise + 0.05f, 0.25f, 0.4f),
+                Mathf.Clamp(tSunRise + 0.05f, 0.0f, 1.0f),
                 0.5f,
-                Mathf.Clamp(tSunSet - 0.05f, 0.65f, 0.75f),
+                Mathf.Clamp(tSunSet - 0.05f, 0.0f, 1.0f),
                 tSunSet,
-                Mathf.Clamp(tSunSet + 0.05f, 0.75f, 0.8f),
+                Mathf.Clamp(tSunSet + 0.05f, 0.0f, 1.0f),
                 1f
             };
             {
@@ -279,11 +297,13 @@ public class DayNightCycle : MonoBehaviour
             {
                 Keyframe[] keys = new Keyframe[]
                 {
-                    new Keyframe(ts[2],0.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[3],0.8f, 5.0f, 5.0f),
+                    new Keyframe(ts[1],0.2f, 0.0f, 0.0f),
+                    new Keyframe(ts[2],0.8f, 2.0f, 2.0f),
+                    new Keyframe(ts[3],1.0f, 0.0f, 0.0f),
                     new Keyframe(ts[4],1.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[5],0.8f, -5.0f, -5.0f),
-                    new Keyframe(ts[6],0.0f, 0.0f, 0.0f),
+                    new Keyframe(ts[5],1.0f, 0.0f, 0.0f),
+                    new Keyframe(ts[6],0.8f, -2.0f, -2.0f),
+                    new Keyframe(ts[7],0.0f, 0.0f, 0.0f),
                 };
                 sunIntensity = new AnimationCurve(keys);
             }
@@ -341,13 +361,13 @@ public class DayNightCycle : MonoBehaviour
             float[] ts = new float[]
             {
                 0f,
-                Mathf.Clamp(tSunRise - 0.1f, 0.1f, 0.25f),
-                tSunRise - 0.05f,
-                Mathf.Clamp(tSunRise, 0.2f, 0.35f),
+                Mathf.Clamp(tSunRise - 0.15f, 0.0f, 1.0f),
+                tSunRise - 0.1f,
+                Mathf.Clamp(tSunRise - 0.05f, 0.0f, 1.0f),
                 0.5f,
-                Mathf.Clamp(tSunSet, 0.7f, 0.8f),
-                tSunSet + 0.05f,
-                Mathf.Clamp(tSunSet + 0.1f, 0.8f, 0.9f),
+                Mathf.Clamp(tSunSet + 0.05f, 0.0f, 1.0f),
+                tSunSet + 0.1f,
+                Mathf.Clamp(tSunSet + 0.15f, 0.0f, 1.0f),
                 1f
             };
             {
@@ -381,9 +401,11 @@ public class DayNightCycle : MonoBehaviour
                 Keyframe[] keys = new Keyframe[]
                 {
                     new Keyframe(ts[0],1.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[1],0.8f, -5.0f, -5.0f),
+                    new Keyframe(ts[1],1.0f, 0.0f, 0.0f),
+                    new Keyframe(ts[2],0.8f, -2.0f, -2.0f),
                     new Keyframe(ts[4],0.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[7],0.8f, 5.0f, 5.0f),
+                    new Keyframe(ts[6],0.8f, 2.0f, 2.0f),
+                    new Keyframe(ts[7],1.0f, 0.0f, 0.0f),
                     new Keyframe(ts[8],1.0f, 0.0f, 0.0f),
                 };
                 moonIntensity = new AnimationCurve(keys);
@@ -445,13 +467,13 @@ public class DayNightCycle : MonoBehaviour
             float[] ts = new float[]
             {
                 0f,
-                Mathf.Clamp(tSunRise - 0.05f, 0.1f, 0.25f),
+                Mathf.Clamp(tSunRise - 0.05f, 0.0f, 1.0f),
                 tSunRise,
-                Mathf.Clamp(tSunRise + 0.05f, 0.25f, 0.4f),
+                Mathf.Clamp(tSunRise + 0.05f, 0.0f, 1.0f),
                 0.5f,
-                Mathf.Clamp(tSunSet - 0.05f, 0.65f, 0.75f),
+                Mathf.Clamp(tSunSet - 0.05f, 0.0f, 1.0f),
                 tSunSet,
-                Mathf.Clamp(tSunSet + 0.05f, 0.75f, 0.8f),
+                Mathf.Clamp(tSunSet + 0.05f, 0.0f, 1.0f),
                 1f
             };
             {
@@ -498,30 +520,32 @@ public class DayNightCycle : MonoBehaviour
             float[] ts = new float[]
             {
                 0f,
-                Mathf.Clamp(tSunRise - 0.05f, 0.1f, 0.25f),
+                Mathf.Clamp(tSunRise - 0.05f, 0.0f, 1.0f),
                 tSunRise,
-                Mathf.Clamp(tSunRise + 0.05f, 0.25f, 0.4f),
+                Mathf.Clamp(tSunRise + 0.05f, 0.0f, 1.0f),
                 0.5f,
-                Mathf.Clamp(tSunSet - 0.05f, 0.65f, 0.75f),
+                Mathf.Clamp(tSunSet - 0.05f, 0.0f, 1.0f),
                 tSunSet,
-                Mathf.Clamp(tSunSet + 0.05f, 0.75f, 0.8f),
+                Mathf.Clamp(tSunSet + 0.05f, 0.0f, 1.0f),
                 1f
             };
             {
                 Keyframe[] keys = new Keyframe[]
                 {
-                    new Keyframe(ts[0],config.lighting.minAmbientDimmer, 0.0f, 0.0f),
-                    new Keyframe(ts[4],config.lighting.maxAmbientDimmer, 0.0f, 0.0f),
-                    new Keyframe(ts[8],config.lighting.minAmbientDimmer, 0.0f, 0.0f)
+                    new Keyframe(ts[1],config.lighting.minAmbientDimmer, 0.0f, 0.0f),
+                    new Keyframe(ts[2],config.lighting.maxAmbientDimmer, 0.0f, 0.0f),
+                    new Keyframe(ts[6],config.lighting.maxAmbientDimmer, 0.0f, 0.0f),
+                    new Keyframe(ts[7],config.lighting.minAmbientDimmer, 0.0f, 0.0f)
                 };
                 cloudAmbientDimmer = new AnimationCurve(keys);
             }
             {
                 Keyframe[] keys = new Keyframe[]
                 {
-                    new Keyframe(ts[0],config.lighting.minLightDimmer, 0.0f, 0.0f),
-                    new Keyframe(ts[4],config.lighting.maxLightDimmer, 0.0f, 0.0f),
-                    new Keyframe(ts[8],config.lighting.minLightDimmer, 0.0f, 0.0f)
+                    new Keyframe(ts[1],config.lighting.minLightDimmer, 0.0f, 0.0f),
+                    new Keyframe(ts[2],config.lighting.maxLightDimmer, 0.0f, 0.0f),
+                    new Keyframe(ts[6],config.lighting.maxLightDimmer, 0.0f, 0.0f),
+                    new Keyframe(ts[7],config.lighting.minLightDimmer, 0.0f, 0.0f)
                 };
                 cloudLightDimmer = new AnimationCurve(keys);
             }
