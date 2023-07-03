@@ -90,15 +90,15 @@ public class DayNightCycle : MonoBehaviour
     {
         if(t > _tSunSet && isDayTime)
         {
-            //_sunTransform.gameObject.SetActive(false);
-            //_moonTransform.gameObject.SetActive(true);
+            _sunTransform.gameObject.SetActive(false);
+            _moonTransform.gameObject.SetActive(true);
             isDayTime = false;
             onSunSet?.Invoke(currentTick);
         }
         else if (t > _tSunRise && !isDayTime)
         {
-            //_sunTransform.gameObject.SetActive(true);
-            //_moonTransform.gameObject.SetActive(false);
+            _sunTransform.gameObject.SetActive(true);
+            _moonTransform.gameObject.SetActive(false);
             isDayTime = true;
             onSunRise?.Invoke(currentTick);
         }
@@ -163,7 +163,7 @@ public class DayNightCycle : MonoBehaviour
 
         _config = new ConfigControl();
         _config.SetupSun    (CONFIG.sunLight, _tSunRise, _tSunSet);
-        _config.SetupSun    (CONFIG.moonLight, _tSunRise, _tSunSet);
+        _config.SetupMoon   (CONFIG.moonLight, _tSunRise, _tSunSet);
         _config.SetupSky    (CONFIG.sky, _tSunRise, _tSunSet);
         _config.SetupCloud  (CONFIG.cloud, _tSunRise, _tSunSet);
     }
@@ -445,6 +445,7 @@ public class DayNightCycle : MonoBehaviour
             float[] ts = new float[]
             {
                 0f,
+                Mathf.Clamp(tSunRise - 0.05f, 0.1f, 0.25f),
                 tSunRise,
                 Mathf.Clamp(tSunRise + 0.05f, 0.25f, 0.4f),
                 0.5f,
@@ -506,6 +507,24 @@ public class DayNightCycle : MonoBehaviour
                 Mathf.Clamp(tSunSet + 0.05f, 0.75f, 0.8f),
                 1f
             };
+            {
+                Keyframe[] keys = new Keyframe[]
+                {
+                    new Keyframe(ts[0],config.lighting.minAmbientDimmer, 0.0f, 0.0f),
+                    new Keyframe(ts[4],config.lighting.maxAmbientDimmer, 0.0f, 0.0f),
+                    new Keyframe(ts[8],config.lighting.minAmbientDimmer, 0.0f, 0.0f)
+                };
+                cloudAmbientDimmer = new AnimationCurve(keys);
+            }
+            {
+                Keyframe[] keys = new Keyframe[]
+                {
+                    new Keyframe(ts[0],config.lighting.minLightDimmer, 0.0f, 0.0f),
+                    new Keyframe(ts[4],config.lighting.maxLightDimmer, 0.0f, 0.0f),
+                    new Keyframe(ts[8],config.lighting.minLightDimmer, 0.0f, 0.0f)
+                };
+                cloudLightDimmer = new AnimationCurve(keys);
+            }
             {
                 cloudScatteringTint = new Gradient();
                 cloudScatteringTint.mode = GradientMode.Blend;
