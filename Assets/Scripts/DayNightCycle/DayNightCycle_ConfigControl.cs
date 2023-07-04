@@ -32,7 +32,40 @@ public partial class DayNightCycle : MonoBehaviour
         public AnimationCurve sunRotation;
         public AnimationCurve moonRotation;
 
+        public AnimationCurve sunLensFlare;
+
         public ConfigControl() { }
+
+        public void SetUpLensFlare(float tSunRise, float tSunSet)
+        {
+            float[] sunTs = new float[]
+            {
+                0f,
+                Mathf.Clamp(tSunRise - 0.05f, 0.0f, 1.0f),
+                tSunRise,
+                Mathf.Clamp(tSunRise + 0.05f, 0.0f, 1.0f),
+                0.5f,
+                Mathf.Clamp(tSunSet - 0.05f, 0.0f, 1.0f),
+                tSunSet,
+                Mathf.Clamp(tSunSet + 0.05f, 0.0f, 1.0f),
+                1f
+            };
+            {
+                Keyframe[] keys = new Keyframe[]
+                {
+                    new Keyframe(sunTs[0],0.0f, 0.0f, 0.0f),
+                    //new Keyframe(sunTs[1],0.0f, 0.0f, 0.0f),
+                    new Keyframe(sunTs[2],0.0f, 0.0f, 0.0f),
+                    //new Keyframe(sunTs[3],0.4f, 0.0f, 0.0f),
+                    new Keyframe(sunTs[4],1.0f, 0.0f, 0.0f),
+                    //new Keyframe(sunTs[5],0.6f, 0.0f, 0.0f),
+                    new Keyframe(sunTs[6],0.0f, 0.0f, 0.0f),
+                    //new Keyframe(sunTs[7],0.0f, 0.0f, 0.0f),
+                    new Keyframe(sunTs[8],0.0f, 0.0f, 0.0f),
+                };
+                sunLensFlare = new AnimationCurve(keys);
+            }
+        }
         public void SetUpRotationCurve(float tSunRise, float tSunSet)
         {
             float[] sunTs = new float[]

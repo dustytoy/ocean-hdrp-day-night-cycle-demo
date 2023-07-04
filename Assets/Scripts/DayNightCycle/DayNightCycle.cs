@@ -141,6 +141,9 @@ public partial class DayNightCycle : MonoBehaviour
             var emis = config.sunLight.lightEmission;
             _sunData.color      = configSample.sunEmissionColor.Evaluate(t);
             _sunData.intensity  = Mathf.Clamp(configSample.sunIntensity.Evaluate(t) * emis.maxIntensity, emis.minIntensity, emis.maxIntensity);
+
+            _sunFlare.intensity = Mathf.Clamp01(configSample.sunLensFlare.Evaluate(t));
+            _sunFlare.scale     = Mathf.Clamp01(configSample.sunLensFlare.Evaluate(t));
         }
         else
         {
@@ -192,6 +195,7 @@ public partial class DayNightCycle : MonoBehaviour
         configSample.SetupSky    (config.sky, _tSunRise, _tSunSet);
         configSample.SetupCloud  (config.cloud, _tSunRise, _tSunSet);
         configSample.SetUpRotationCurve(_tSunRise, _tSunSet);
+        configSample.SetUpLensFlare(_tSunRise, _tSunSet);
     }
 
     private void OnSunSet(long ticks)
