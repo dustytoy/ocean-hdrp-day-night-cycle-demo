@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 674.25446, g: 483.2625, b: 406.7198, a: 1}
+  m_IndirectSpecularColor: {r: 675.0567, g: 483.29596, b: 405.2657, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -175,6 +175,7 @@ MonoBehaviour:
   globalVolumn: {fileID: 128746228}
   sky: {fileID: 0}
   clouds: {fileID: 0}
+  fog: {fileID: 0}
   water: {fileID: 2081138439}
   config:
     startTime:
@@ -262,6 +263,9 @@ MonoBehaviour:
         dayScatteringColor: {r: 0, g: 0.40000004, b: 0.40000004, a: 1}
         sunSetScatteringColor: {r: 0, g: 0.40000004, b: 0.40000004, a: 1}
         nightScatteringColor: {r: 0, g: 0.4, b: 0.4, a: 1}
+    fog:
+      dayMaxHeight: 0
+      nightMaxHeight: 20
   configSample:
     sunAngularDiameter:
       serializedVersion: 2
@@ -683,6 +687,12 @@ MonoBehaviour:
       m_ColorSpace: -1
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
+    fogMaxHeight:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
 --- !u!1 &128746227
 GameObject:
   m_ObjectHideFlags: 0

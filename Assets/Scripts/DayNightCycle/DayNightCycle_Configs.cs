@@ -14,6 +14,7 @@ public partial class DayNightCycle : MonoBehaviour
         public SkyConfig sky;
         public CloudConfig cloud;
         public WaterConfig water;
+        public FogConfig fog;
     }
 
     // Per half day. 1 sun and 1 moon
@@ -113,5 +114,12 @@ public partial class DayNightCycle : MonoBehaviour
             public Color sunSetScatteringColor;
             public Color nightScatteringColor;
         }
+    }
+
+    [Serializable]
+    public struct FogConfig
+    {
+        public float dayMaxHeight;
+        public float nightMaxHeight;
     }
 }

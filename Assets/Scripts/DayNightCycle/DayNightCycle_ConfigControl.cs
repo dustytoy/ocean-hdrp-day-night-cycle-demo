@@ -38,7 +38,35 @@ public partial class DayNightCycle : MonoBehaviour
         public Gradient waterRefractingColor;
         public Gradient waterScatteringColor;
 
+        public AnimationCurve fogMaxHeight;
+
         public ConfigControl() { }
+
+        public void SetUpFogHeight(FogConfig config, float tSunRise, float tSunSet)
+        {
+            float[] ts = new float[]
+            {
+                0f,
+                Mathf.Clamp(tSunRise - 0.05f, 0.0f, 1.0f),
+                tSunRise,
+                Mathf.Clamp(tSunRise + 0.05f, 0.0f, 1.0f),
+                0.5f,
+                Mathf.Clamp(tSunSet - 0.05f, 0.0f, 1.0f),
+                tSunSet,
+                Mathf.Clamp(tSunSet + 0.05f, 0.0f, 1.0f),
+                1f
+            };
+
+            {
+                Keyframe[] keys = new Keyframe[]
+                {
+                    new Keyframe(ts[0],config.nightMaxHeight, 0.0f, 0.0f),
+                    new Keyframe(ts[4],config.dayMaxHeight, 0.0f, 0.0f),
+                    new Keyframe(ts[8],config.nightMaxHeight, 0.0f, 0.0f),
+                };
+                fogMaxHeight = new AnimationCurve(keys);
+            }
+        }
 
         public void SetUpWater(WaterConfig config, float tSunRise, float tSunSet)
         {
@@ -215,40 +243,40 @@ public partial class DayNightCycle : MonoBehaviour
             {
                 Keyframe[] keys = new Keyframe[]
                 {
-                    new Keyframe(ts[0],0.8f, 0.0f, 0.0f),
-                    new Keyframe(ts[4],1.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[8],0.8f, 0.0f, 0.0f)
+                    new Keyframe(ts[0],Mathf.Clamp(0.8f * config.celestialBody.maxAngularDiameter, config.celestialBody.minAngularDiameter, config.celestialBody.maxAngularDiameter), 0.0f, 0.0f),
+                    new Keyframe(ts[4],Mathf.Clamp(1.0f * config.celestialBody.maxAngularDiameter, config.celestialBody.minAngularDiameter, config.celestialBody.maxAngularDiameter), 0.0f, 0.0f),
+                    new Keyframe(ts[8],Mathf.Clamp(0.8f * config.celestialBody.maxAngularDiameter, config.celestialBody.minAngularDiameter, config.celestialBody.maxAngularDiameter), 0.0f, 0.0f)
                 };
                 sunAngularDiameter = new AnimationCurve(keys);
             }
             {
                 Keyframe[] keys = new Keyframe[]
                 {
-                    new Keyframe(ts[2],0.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[4],1.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[6],0.0f, 0.0f, 0.0f),
+                    new Keyframe(ts[2],Mathf.Clamp(0.0f * config.celestialBody.maxFlareSize, config.celestialBody.minFlareSize, config.celestialBody.maxFlareSize), 0.0f, 0.0f),
+                    new Keyframe(ts[4],Mathf.Clamp(1.0f * config.celestialBody.maxFlareSize, config.celestialBody.minFlareSize, config.celestialBody.maxFlareSize), 0.0f, 0.0f),
+                    new Keyframe(ts[6],Mathf.Clamp(0.0f * config.celestialBody.maxFlareSize, config.celestialBody.minFlareSize, config.celestialBody.maxFlareSize), 0.0f, 0.0f)
                 };
                 sunFlareSize = new AnimationCurve(keys);
             }
             {
                 Keyframe[] keys = new Keyframe[]
                 {
-                    new Keyframe(ts[2],0.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[4],1.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[6],0.0f, 0.0f, 0.0f),
+                    new Keyframe(ts[2],Mathf.Clamp(0.0f * config.celestialBody.maxFlareFalloff, config.celestialBody.minFlareFalloff, config.celestialBody.maxFlareFalloff), 0.0f, 0.0f),
+                    new Keyframe(ts[4],Mathf.Clamp(0.0f * config.celestialBody.maxFlareFalloff, config.celestialBody.minFlareFalloff, config.celestialBody.maxFlareFalloff), 0.0f, 0.0f),
+                    new Keyframe(ts[6],Mathf.Clamp(0.0f * config.celestialBody.maxFlareFalloff, config.celestialBody.minFlareFalloff, config.celestialBody.maxFlareFalloff), 0.0f, 0.0f)
                 };
                 sunFlareFalloff = new AnimationCurve(keys);
             }
             {
                 Keyframe[] keys = new Keyframe[]
                 {
-                    new Keyframe(ts[1],0.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[2],0.4f, 3.0f, 2.0f),
-                    new Keyframe(ts[3],0.9f, 2.0f, 1.0f),
-                    new Keyframe(ts[4],1.0f, 1.0f, -1.0f),
-                    new Keyframe(ts[5],0.9f, -1.0f, -2.0f),
-                    new Keyframe(ts[6],0.4f, -2.0f, -3.0f),
-                    new Keyframe(ts[7],0.0f, 0.0f, 0.0f),
+                    new Keyframe(ts[1],Mathf.Clamp(0.0f * config.lightEmission.maxIntensity, config.lightEmission.minIntensity, config.lightEmission.maxIntensity), 0.0f, 0.0f),
+                    new Keyframe(ts[2],Mathf.Clamp(0.4f * config.lightEmission.maxIntensity, config.lightEmission.minIntensity, config.lightEmission.maxIntensity), 3.0f, 2.0f),
+                    new Keyframe(ts[3],Mathf.Clamp(0.9f * config.lightEmission.maxIntensity, config.lightEmission.minIntensity, config.lightEmission.maxIntensity), 2.0f, 1.0f),
+                    new Keyframe(ts[4],Mathf.Clamp(1.0f * config.lightEmission.maxIntensity, config.lightEmission.minIntensity, config.lightEmission.maxIntensity), 1.0f, -1.0f),
+                    new Keyframe(ts[5],Mathf.Clamp(0.9f * config.lightEmission.maxIntensity, config.lightEmission.minIntensity, config.lightEmission.maxIntensity), -1.0f, -2.0f),
+                    new Keyframe(ts[6],Mathf.Clamp(0.4f * config.lightEmission.maxIntensity, config.lightEmission.minIntensity, config.lightEmission.maxIntensity), -2.0f, -3.0f),
+                    new Keyframe(ts[7],Mathf.Clamp(0.0f * config.lightEmission.maxIntensity, config.lightEmission.minIntensity, config.lightEmission.maxIntensity), 0.0f, 0.0f)
                 };
                 sunIntensity = new AnimationCurve(keys);
             }
@@ -265,7 +293,7 @@ public partial class DayNightCycle : MonoBehaviour
                 {
                     new GradientColorKey(config.celestialBody.sunRiseFlareTint,ts[2]),
                     new GradientColorKey(config.celestialBody.peakFlareTint,ts[4]),
-                    new GradientColorKey(config.celestialBody.sunSetFlareTint,ts[6]),
+                    new GradientColorKey(config.celestialBody.sunSetFlareTint,ts[6])
                 };
             }
             {
@@ -281,7 +309,7 @@ public partial class DayNightCycle : MonoBehaviour
                 {
                     new GradientColorKey(config.celestialBody.sunRiseSurfaceTint,ts[2]),
                     new GradientColorKey(config.celestialBody.peakSurfaceTint,ts[4]),
-                    new GradientColorKey(config.celestialBody.sunSetSurfaceTint,ts[6]),
+                    new GradientColorKey(config.celestialBody.sunSetSurfaceTint,ts[6])
                 };
             }
             {
@@ -297,7 +325,7 @@ public partial class DayNightCycle : MonoBehaviour
                 {
                     new GradientColorKey(config.lightEmission.sunRiseEmissionColor,ts[2]),
                     new GradientColorKey(config.lightEmission.peakEmissionColor,ts[4]),
-                    new GradientColorKey(config.lightEmission.sunSetEmissionColor,ts[6]),
+                    new GradientColorKey(config.lightEmission.sunSetEmissionColor,ts[6])
                 };
             }
         }
@@ -318,40 +346,40 @@ public partial class DayNightCycle : MonoBehaviour
             {
                 Keyframe[] keys = new Keyframe[]
                 {
-                    new Keyframe(ts[0],1.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[4],0.8f, 0.0f, 0.0f),
-                    new Keyframe(ts[8],1.0f, 0.0f, 0.0f)
+                    new Keyframe(ts[0],Mathf.Clamp(1.0f * config.celestialBody.maxAngularDiameter, config.celestialBody.minAngularDiameter, config.celestialBody.maxAngularDiameter), 0.0f, 0.0f),
+                    new Keyframe(ts[4],Mathf.Clamp(0.8f * config.celestialBody.maxAngularDiameter, config.celestialBody.minAngularDiameter, config.celestialBody.maxAngularDiameter), 0.0f, 0.0f),
+                    new Keyframe(ts[8],Mathf.Clamp(1.0f * config.celestialBody.maxAngularDiameter, config.celestialBody.minAngularDiameter, config.celestialBody.maxAngularDiameter), 0.0f, 0.0f)
                 };
                 moonAngularDiameter = new AnimationCurve(keys);
             }
             {
                 Keyframe[] keys = new Keyframe[]
                 {
-                    new Keyframe(ts[2],1.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[4],0.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[6],1.0f, 0.0f, 0.0f),
+                    new Keyframe(ts[2],Mathf.Clamp(1.0f * config.celestialBody.maxFlareSize, config.celestialBody.minFlareSize, config.celestialBody.maxFlareSize), 0.0f, 0.0f),
+                    new Keyframe(ts[4],Mathf.Clamp(0.0f * config.celestialBody.maxFlareSize, config.celestialBody.minFlareSize, config.celestialBody.maxFlareSize), 0.0f, 0.0f),
+                    new Keyframe(ts[6],Mathf.Clamp(1.0f * config.celestialBody.maxFlareSize, config.celestialBody.minFlareSize, config.celestialBody.maxFlareSize), 0.0f, 0.0f)
                 };
                 moonFlareSize = new AnimationCurve(keys);
             }
             {
                 Keyframe[] keys = new Keyframe[]
                 {
-                    new Keyframe(ts[2],1.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[4],0.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[6],1.0f, 0.0f, 0.0f),
+                    new Keyframe(ts[2],Mathf.Clamp(1.0f * config.celestialBody.maxFlareFalloff, config.celestialBody.minFlareFalloff, config.celestialBody.maxFlareFalloff), 0.0f, 0.0f),
+                    new Keyframe(ts[4],Mathf.Clamp(0.0f * config.celestialBody.maxFlareFalloff, config.celestialBody.minFlareFalloff, config.celestialBody.maxFlareFalloff), 0.0f, 0.0f),
+                    new Keyframe(ts[6],Mathf.Clamp(1.0f * config.celestialBody.maxFlareFalloff, config.celestialBody.minFlareFalloff, config.celestialBody.maxFlareFalloff), 0.0f, 0.0f)
                 };
                 moonFlareFalloff = new AnimationCurve(keys);
             }
             {
                 Keyframe[] keys = new Keyframe[]
                 {
-                    new Keyframe(ts[0],1.0f, 0.0f, -2.0f),
-                    new Keyframe(ts[1],0.3f, -2.0f, -2.0f),
-                    new Keyframe(ts[2],0.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[4],0.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[6],0.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[7],0.3f, 2.0f, 2.0f),
-                    new Keyframe(ts[8],1.0f, 2.0f, 0.0f),
+                    new Keyframe(ts[0],Mathf.Clamp(1.0f * config.lightEmission.maxIntensity, config.lightEmission.minIntensity, config.lightEmission.maxIntensity), 0.0f, -2.0f),
+                    new Keyframe(ts[1],Mathf.Clamp(0.3f * config.lightEmission.maxIntensity, config.lightEmission.minIntensity, config.lightEmission.maxIntensity), -2.0f, -2.0f),
+                    new Keyframe(ts[2],Mathf.Clamp(0.0f * config.lightEmission.maxIntensity, config.lightEmission.minIntensity, config.lightEmission.maxIntensity), 0.0f, 0.0f),
+                    new Keyframe(ts[4],Mathf.Clamp(0.0f * config.lightEmission.maxIntensity, config.lightEmission.minIntensity, config.lightEmission.maxIntensity), 0.0f, 0.0f),
+                    new Keyframe(ts[6],Mathf.Clamp(0.0f * config.lightEmission.maxIntensity, config.lightEmission.minIntensity, config.lightEmission.maxIntensity), 0.0f, 0.0f),
+                    new Keyframe(ts[7],Mathf.Clamp(0.3f * config.lightEmission.maxIntensity, config.lightEmission.minIntensity, config.lightEmission.maxIntensity), 2.0f, 2.0f),
+                    new Keyframe(ts[8],Mathf.Clamp(1.0f * config.lightEmission.maxIntensity, config.lightEmission.minIntensity, config.lightEmission.maxIntensity), 2.0f, 0.0f)
                 };
                 moonIntensity = new AnimationCurve(keys);
             }
@@ -369,7 +397,7 @@ public partial class DayNightCycle : MonoBehaviour
                     new GradientColorKey(config.celestialBody.peakFlareTint,ts[0]),
                     new GradientColorKey(config.celestialBody.sunRiseFlareTint,ts[2]),
                     new GradientColorKey(config.celestialBody.sunSetFlareTint,ts[6]),
-                    new GradientColorKey(config.celestialBody.peakFlareTint,ts[8]),
+                    new GradientColorKey(config.celestialBody.peakFlareTint,ts[8])
                 };
             }
             {
@@ -386,7 +414,7 @@ public partial class DayNightCycle : MonoBehaviour
                     new GradientColorKey(config.celestialBody.peakSurfaceTint,ts[0]),
                     new GradientColorKey(config.celestialBody.sunRiseSurfaceTint,ts[2]),
                     new GradientColorKey(config.celestialBody.sunSetSurfaceTint,ts[6]),
-                    new GradientColorKey(config.celestialBody.peakSurfaceTint,ts[8]),
+                    new GradientColorKey(config.celestialBody.peakSurfaceTint,ts[8])
                 };
             }
             {
@@ -403,7 +431,7 @@ public partial class DayNightCycle : MonoBehaviour
                     new GradientColorKey(config.lightEmission.peakEmissionColor,ts[0]),
                     new GradientColorKey(config.lightEmission.sunRiseEmissionColor,ts[2]),
                     new GradientColorKey(config.lightEmission.sunSetEmissionColor,ts[6]),
-                    new GradientColorKey(config.lightEmission.peakEmissionColor,ts[8]),
+                    new GradientColorKey(config.lightEmission.peakEmissionColor,ts[8])
                 };
             }
         }
