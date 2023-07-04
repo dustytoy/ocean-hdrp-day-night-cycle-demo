@@ -17,7 +17,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   skyIntensityMode:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   exposure:
     m_OverrideState: 0
@@ -39,7 +39,7 @@ MonoBehaviour:
     m_Value: 0
   updatePeriod:
     m_OverrideState: 0
-    m_Value: 0
+    m_Value: 0.2
   includeSunInBaking:
     m_OverrideState: 0
     m_Value: 0
@@ -75,10 +75,10 @@ MonoBehaviour:
     m_Value: 55261.973
   aerosolDensity:
     m_OverrideState: 0
-    m_Value: 0.01192826
+    m_Value: 0.012
   aerosolTint:
     m_OverrideState: 0
-    m_Value: {r: 0.9019608, g: 0.9019608, b: 0.9019608, a: 1}
+    m_Value: {r: 0.8867924, g: 0.8867924, b: 0.8867924, a: 1}
   aerosolMaximumAltitude:
     m_OverrideState: 0
     m_Value: 8289.296
@@ -90,7 +90,7 @@ MonoBehaviour:
     m_Value: 3
   groundTint:
     m_OverrideState: 0
-    m_Value: {r: 0.4, g: 0.25, b: 0.15, a: 1}
+    m_Value: {r: 0.076687984, g: 0.4862745, b: 0.5188679, a: 1}
   groundColorTexture:
     m_OverrideState: 0
     m_Value: {fileID: 0}
@@ -212,8 +212,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   earthCurvature:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 0.5
   cloudTiling:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1}
@@ -437,7 +437,7 @@ MonoBehaviour:
   orientation:
     m_OverrideState: 1
     m_Value:
-      mode: 0
+      mode: 1
       customValue: 0
       additiveValue: 0
       multiplyValue: 1
@@ -460,11 +460,11 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   temporalAccumulationFactor:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.95
   ghostingReduction:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   perceptualBlending:
     m_OverrideState: 0
     m_Value: 1
@@ -531,8 +531,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   maxFogDistance:
-    m_OverrideState: 0
-    m_Value: 5000
+    m_OverrideState: 1
+    m_Value: 1000
   mipFogMaxMip:
     m_OverrideState: 0
     m_Value: 0.5
@@ -546,14 +546,14 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   maximumHeight:
-    m_OverrideState: 0
-    m_Value: 50
-  meanFreePath:
-    m_OverrideState: 0
-    m_Value: 400
-  enableVolumetricFog:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 15
+  meanFreePath:
+    m_OverrideState: 1
+    m_Value: 10
+  enableVolumetricFog:
+    m_OverrideState: 0
+    m_Value: 0
   albedo:
     m_OverrideState: 1
     m_Value: {r: 1, g: 1, b: 1, a: 1}
@@ -561,8 +561,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   depthExtent:
-    m_OverrideState: 0
-    m_Value: 64
+    m_OverrideState: 1
+    m_Value: 0.1
   denoisingMode:
     m_OverrideState: 0
     m_Value: 2
@@ -614,7 +614,7 @@ MonoBehaviour:
     m_Value: 1
   windOrientation:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 90
   windSpeed:
     m_OverrideState: 1
     m_Value: 0

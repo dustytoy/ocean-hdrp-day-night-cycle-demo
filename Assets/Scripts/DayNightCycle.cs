@@ -5,7 +5,7 @@ using UnityEngine.Rendering.HighDefinition;
 
 public class DayNightCycle : MonoBehaviour
 {
-    [Range(1f, 1000f)]
+    [Range(1f, 10000f)]
     public int gameSecondPerRealSecond;
     [HideInInspector]
     public long currentTick;
@@ -35,7 +35,7 @@ public class DayNightCycle : MonoBehaviour
 
     private float _tSunRise;
     private float _tSunSet;
-
+    private int _dayCount;
     private GUIStyle _style = new GUIStyle();
 
     private void Awake()
@@ -65,30 +65,34 @@ public class DayNightCycle : MonoBehaviour
     private void Start()
     {
         Setup();
-        float t = ((float)currentTick % OneDayTime.TotalTicks) / OneDayTime.TotalTicks;
+        float t = ((float)currentTick % MyTime.TotalTicks) / MyTime.TotalTicks;
         Evaluate(t);
     }
 
     private void FixedUpdate()
     {
-        float t = (float)currentTick / OneDayTime.TotalTicks;
+        float t = (float)currentTick / MyTime.TotalTicks;
         Evaluate(t);
 
         ocean.timeMultiplier = gameSecondPerRealSecond;
         _overrideWindSpeed.customValue = gameSecondPerRealSecond * 1;
         clouds.globalWindSpeed.Override(_overrideWindSpeed);
 
-        currentTick += (long)(Time.fixedDeltaTime * OneDayTime.TicksPerSecond * gameSecondPerRealSecond);
-        currentTick %= OneDayTime.TotalTicks;
+        currentTick += (long)(Time.fixedDeltaTime * MyTime.TicksPerSecond * gameSecondPerRealSecond);
+        if(currentTick >= MyTime.TotalTicks)
+        {
+            currentTick %= MyTime.TotalTicks;
+            _dayCount++;
+        }
     }
 
     private void OnGUI()
     {
-        OneDayTime time = OneDayTime.ToOneDayTime(currentTick);
+        MyTime time = MyTime.ToOneDayTime(currentTick);
         GUI.Label(new Rect(0f, 0f, 500f, 200f), $"SunRise: {config.sunRiseTime} | Sunset:{config.sunSetTime}\n" +
-            $"Time (t): {time} ({((float)currentTick % OneDayTime.TotalTicks) / OneDayTime.TotalTicks})\n" +
+            $"Time (t): {time} ({((float)currentTick % MyTime.TotalTicks) / MyTime.TotalTicks})\n" +
             $"SecondsPerRealSecond: {gameSecondPerRealSecond}\n" +
-            $"Sun : {(_moonTransform.gameObject.activeInHierarchy ? "Active" : "Inactive")} ({(int)_sunTransform.eulerAngles.x} degrees, facing {_sunTransform.forward})\n" +
+            $"Sun : {(_sunTransform.gameObject.activeInHierarchy ? "Active" : "Inactive")} ({(int)_sunTransform.eulerAngles.x} degrees, facing {_sunTransform.forward})\n" +
             $"Moon: {(_moonTransform.gameObject.activeInHierarchy ? "Active" : "Inactive")} ({(int)_moonTransform.eulerAngles.x} degrees, facing {_moonTransform.forward})\n", _style);
     }
 
@@ -115,8 +119,13 @@ public class DayNightCycle : MonoBehaviour
             isDayTime = false;
             onSunSet?.Invoke(currentTick);
         }
-        _sunTransform.rotation  = Quaternion.AngleAxis(-90f, Vector3.up) * Quaternion.AngleAxis(t * 360f + 180f + 90f, Vector3.right);
-        _moonTransform.rotation = Quaternion.AngleAxis(-90f, Vector3.up) * Quaternion.AngleAxis(t * 360f + 90f       , Vector3.right);
+
+        {
+            var sunAngle = Mathf.Clamp(configSample.sunRotation.Evaluate(t) * 360f, 0f, 360f);
+            var moonAngle = Mathf.Clamp(configSample.moonRotation.Evaluate(t) * 360f, 0f, 360f);
+            _sunTransform.rotation = Quaternion.AngleAxis(-90f, Vector3.up) * Quaternion.AngleAxis(_dayCount * 360f + 270f + sunAngle, Vector3.right);
+            _moonTransform.rotation = Quaternion.AngleAxis(-90f, Vector3.up) * Quaternion.AngleAxis(_dayCount * 360f + 90f + moonAngle, Vector3.right);
+        }
 
         if(isDayTime)
         {
@@ -160,8 +169,8 @@ public class DayNightCycle : MonoBehaviour
     public void Setup()
     {
         // Setup Timings
-        _tSunRise   = (float)config.sunRiseTime.ToTicks() / OneDayTime.TotalTicks;
-        _tSunSet    = (float)config.sunSetTime.ToTicks() / OneDayTime.TotalTicks;
+        _tSunRise = config.sunRiseTime.GetT();
+        _tSunSet = config.sunSetTime.GetT();
         currentTick = config.startTime.ToTicks();
 
         if (currentTick >= config.sunRiseTime.ToTicks() && 
@@ -180,6 +189,7 @@ public class DayNightCycle : MonoBehaviour
         configSample.SetupMoon   (config.moonLight, _tSunRise, _tSunSet);
         configSample.SetupSky    (config.sky, _tSunRise, _tSunSet);
         configSample.SetupCloud  (config.cloud, _tSunRise, _tSunSet);
+        configSample.SetUpRotationCurve(_tSunRise, _tSunSet);
     }
 
     private void OnSunSet(long ticks)
@@ -190,7 +200,7 @@ public class DayNightCycle : MonoBehaviour
     }
 
     [Serializable]
-    public struct OneDayTime
+    public struct MyTime
     {
         public const long TotalTicks = 864000000000;
         public const int TotalSeconds = 86400;
@@ -200,7 +210,6 @@ public class DayNightCycle : MonoBehaviour
         public const long TicksPerMinute = 600000000;
         public const long TicksPerSecond = 10000000;
 
-
         public int hour;
         public int minute;
         public int second;
@@ -209,16 +218,20 @@ public class DayNightCycle : MonoBehaviour
         {
             return hour * TicksPerHour + minute * TicksPerMinute + second * TicksPerSecond;
         }
+        public float GetT()
+        {
+            return ((float)ToTicks() % TotalTicks) / TotalTicks;
+        }
         public override string ToString()
         {
-            return $"{hour}:{minute}:{second}";
+            return string.Format("{0:D2}:{1:D2}:{2:D2}", hour, minute, second);
         }
-        public static OneDayTime ToOneDayTime(long ticks)
+        public static MyTime ToOneDayTime(long ticks)
         {
             int hour = (int)(ticks / TicksPerHour);
             int minute = (int)((ticks - hour * TicksPerHour) / TicksPerMinute);
             int second = (int)((ticks - hour * TicksPerHour - minute * TicksPerMinute) / TicksPerSecond);
-            return new OneDayTime()
+            return new MyTime()
             {
                 hour = hour,
                 minute = minute,
@@ -227,6 +240,7 @@ public class DayNightCycle : MonoBehaviour
         }
     }
 
+    [Serializable]
     public class ConfigControl
     {
         public AnimationCurve sunAngularDiameter;
@@ -252,7 +266,67 @@ public class DayNightCycle : MonoBehaviour
         public AnimationCurve cloudLightDimmer;
         public Gradient cloudScatteringTint;
 
+        public AnimationCurve sunRotation;
+        public AnimationCurve moonRotation;
+
         public ConfigControl() { }
+        public void SetUpRotationCurve(float tSunRise, float tSunSet)
+        {
+            float[] sunTs = new float[]
+            {
+                0f,
+                Mathf.Clamp(tSunRise - 0.05f, 0.0f, 1.0f),
+                tSunRise,
+                Mathf.Clamp(tSunRise + 0.05f, 0.0f, 1.0f),
+                0.5f,
+                Mathf.Clamp(tSunSet - 0.05f, 0.0f, 1.0f),
+                tSunSet,
+                Mathf.Clamp(tSunSet + 0.05f, 0.0f, 1.0f),
+                1f
+            };
+            {
+                Keyframe[] keys = new Keyframe[]
+                {
+                    new Keyframe(sunTs[0],0.0f, 0.0f, 0.0f),
+                    //new Keyframe(sunTs[1],0.2f, 0.0f, 1.0f),
+                    new Keyframe(sunTs[2],0.25f, 1.0f, 1.0f),
+                    //new Keyframe(sunTs[3],0.4f, 1.0f, 1.0f),
+                    new Keyframe(sunTs[4],0.5f, 0.0f, 0.0f),
+                    //new Keyframe(sunTs[5],0.6f, 1.0f, 1.0f),
+                    new Keyframe(sunTs[6],0.75f, 1.0f, 1.0f),
+                    //new Keyframe(sunTs[7],0.8f, 1.0f, 0.0f),
+                    new Keyframe(sunTs[8],1.0f, 0.0f, 0.0f),
+                };
+                sunRotation = new AnimationCurve(keys);
+            }
+            float[] moonTs = new float[]
+            {
+                0f,
+                Mathf.Clamp(tSunRise - 0.06f, 0.0f, 1.0f),
+                tSunRise - 0.01f,
+                Mathf.Clamp(tSunRise + 0.04f, 0.0f, 1.0f),
+                0.5f,
+                Mathf.Clamp(tSunSet - 0.06f, 0.0f, 1.0f),
+                tSunSet,
+                Mathf.Clamp(tSunSet + 0.01f, 0.0f, 1.0f),
+                1f
+            };
+            {
+                Keyframe[] keys = new Keyframe[]
+                {
+                    new Keyframe(moonTs[0],0.0f, 0.0f, 0.0f),
+                    //new Keyframe(moonTs[1],0.1f, 1.0f, 1.0f),
+                    new Keyframe(moonTs[2],0.25f, 1.0f, 1.0f),
+                    //new Keyframe(moonTs[3],0.3f, 1.0f, 0.0f),
+                    new Keyframe(moonTs[4],0.5f, 0.0f, 0.0f),
+                    //new Keyframe(moonTs[5],0.7f, 0.0f, 1.0f),
+                    new Keyframe(moonTs[6],0.75f, 1.0f, 1.0f),
+                    //new Keyframe(moonTs[7],0.9f, 1.0f, 1.0f),
+                    new Keyframe(moonTs[8],1.0f, 0.0f, 0.0f),
+                };
+                moonRotation = new AnimationCurve(keys);
+            }
+        }
         public void SetupSun(LightConfig config, float tSunRise, float tSunSet)
         {
             float[] ts = new float[]
@@ -297,12 +371,12 @@ public class DayNightCycle : MonoBehaviour
             {
                 Keyframe[] keys = new Keyframe[]
                 {
-                    new Keyframe(ts[1],0.2f, 0.0f, 0.0f),
-                    new Keyframe(ts[2],0.8f, 2.0f, 2.0f),
-                    new Keyframe(ts[3],1.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[4],1.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[5],1.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[6],0.8f, -2.0f, -2.0f),
+                    new Keyframe(ts[1],0.0f, 0.0f, 0.0f),
+                    new Keyframe(ts[2],0.4f, 3.0f, 2.0f),
+                    new Keyframe(ts[3],0.9f, 2.0f, 1.0f),
+                    new Keyframe(ts[4],1.0f, 1.0f, -1.0f),
+                    new Keyframe(ts[5],0.9f, -1.0f, -2.0f),
+                    new Keyframe(ts[6],0.4f, -2.0f, -3.0f),
                     new Keyframe(ts[7],0.0f, 0.0f, 0.0f),
                 };
                 sunIntensity = new AnimationCurve(keys);
@@ -361,13 +435,13 @@ public class DayNightCycle : MonoBehaviour
             float[] ts = new float[]
             {
                 0f,
-                Mathf.Clamp(tSunRise - 0.15f, 0.0f, 1.0f),
-                tSunRise - 0.1f,
-                Mathf.Clamp(tSunRise - 0.05f, 0.0f, 1.0f),
+                Mathf.Clamp(tSunRise - 0.06f, 0.0f, 1.0f),
+                tSunRise - 0.01f,
+                Mathf.Clamp(tSunRise + 0.04f, 0.0f, 1.0f),
                 0.5f,
-                Mathf.Clamp(tSunSet + 0.05f, 0.0f, 1.0f),
-                tSunSet + 0.1f,
-                Mathf.Clamp(tSunSet + 0.15f, 0.0f, 1.0f),
+                Mathf.Clamp(tSunSet - 0.06f, 0.0f, 1.0f),
+                tSunSet,
+                Mathf.Clamp(tSunSet + 0.01f, 0.0f, 1.0f),
                 1f
             };
             {
@@ -400,13 +474,13 @@ public class DayNightCycle : MonoBehaviour
             {
                 Keyframe[] keys = new Keyframe[]
                 {
-                    new Keyframe(ts[0],1.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[1],1.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[2],0.8f, -2.0f, -2.0f),
+                    new Keyframe(ts[0],1.0f, 0.0f, -2.0f),
+                    new Keyframe(ts[1],0.3f, -2.0f, -2.0f),
+                    new Keyframe(ts[2],0.0f, 0.0f, 0.0f),
                     new Keyframe(ts[4],0.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[6],0.8f, 2.0f, 2.0f),
-                    new Keyframe(ts[7],1.0f, 0.0f, 0.0f),
-                    new Keyframe(ts[8],1.0f, 0.0f, 0.0f),
+                    new Keyframe(ts[6],0.0f, 0.0f, 0.0f),
+                    new Keyframe(ts[7],0.3f, 2.0f, 2.0f),
+                    new Keyframe(ts[8],1.0f, 2.0f, 0.0f),
                 };
                 moonIntensity = new AnimationCurve(keys);
             }
@@ -532,20 +606,18 @@ public class DayNightCycle : MonoBehaviour
             {
                 Keyframe[] keys = new Keyframe[]
                 {
-                    new Keyframe(ts[1],config.lighting.minAmbientDimmer, 0.0f, 0.0f),
-                    new Keyframe(ts[2],config.lighting.maxAmbientDimmer, 0.0f, 0.0f),
-                    new Keyframe(ts[6],config.lighting.maxAmbientDimmer, 0.0f, 0.0f),
-                    new Keyframe(ts[7],config.lighting.minAmbientDimmer, 0.0f, 0.0f)
+                    new Keyframe(ts[0],config.lighting.minAmbientDimmer, 0.0f, 0.0f),
+                    new Keyframe(ts[4],config.lighting.maxAmbientDimmer, 0.0f, 0.0f),
+                    new Keyframe(ts[8],config.lighting.minAmbientDimmer, 0.0f, 0.0f)
                 };
                 cloudAmbientDimmer = new AnimationCurve(keys);
             }
             {
                 Keyframe[] keys = new Keyframe[]
                 {
-                    new Keyframe(ts[1],config.lighting.minLightDimmer, 0.0f, 0.0f),
-                    new Keyframe(ts[2],config.lighting.maxLightDimmer, 0.0f, 0.0f),
-                    new Keyframe(ts[6],config.lighting.maxLightDimmer, 0.0f, 0.0f),
-                    new Keyframe(ts[7],config.lighting.minLightDimmer, 0.0f, 0.0f)
+                    new Keyframe(ts[0],config.lighting.minLightDimmer, 0.0f, 0.0f),
+                    new Keyframe(ts[4],config.lighting.maxLightDimmer, 0.0f, 0.0f),
+                    new Keyframe(ts[8],config.lighting.minLightDimmer, 0.0f, 0.0f)
                 };
                 cloudLightDimmer = new AnimationCurve(keys);
             }
@@ -573,9 +645,9 @@ public class DayNightCycle : MonoBehaviour
     [Serializable]
     public struct DayNightConfig
     {
-        public OneDayTime startTime;
-        public OneDayTime sunRiseTime;
-        public OneDayTime sunSetTime;
+        public MyTime startTime;
+        public MyTime sunRiseTime;
+        public MyTime sunSetTime;
         public LightConfig sunLight;
         public LightConfig moonLight;
         public SkyConfig sky;
