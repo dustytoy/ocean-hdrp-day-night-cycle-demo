@@ -28,6 +28,7 @@ public class DayNightCycle : MonoBehaviour
     public ConfigControl configSample;
 
     private HDAdditionalLightData _sunData;
+    private LensFlareComponentSRP _sunFlare;
     private HDAdditionalLightData _moonData;
     private Transform _sunTransform;
     private Transform _moonTransform;
@@ -44,6 +45,7 @@ public class DayNightCycle : MonoBehaviour
         globalVolumn.profile.TryGet<VolumetricClouds>(out clouds);
         _sunData = sunLight.GetComponent<HDAdditionalLightData>();
         _moonData = moonLight.GetComponent<HDAdditionalLightData>();
+        _sunFlare = _sunData.GetComponent<LensFlareComponentSRP>();
         _sunTransform = sunLight.transform;
         _moonTransform = moonLight.transform;
         _overrideWindSpeed = new WindSpeedParameter.WindParamaterValue();
@@ -194,9 +196,13 @@ public class DayNightCycle : MonoBehaviour
 
     private void OnSunSet(long ticks)
     {
+        _sunFlare.enabled = false;
+        Debug.Log($"Sun sets at {MyTime.ToOneDayTime(ticks)}");
     }
     private void OnSunRise(long ticks)
     {
+        _sunFlare.enabled = true;
+        Debug.Log($"Sun rises at {MyTime.ToOneDayTime(ticks)}");
     }
 
     [Serializable]
