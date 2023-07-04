@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 674.83575, g: 483.42975, b: 405.75885, a: 1}
+  m_IndirectSpecularColor: {r: 676.0809, g: 484.1126, b: 405.68756, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1568,12 +1568,12 @@ MonoBehaviour:
   waterMaskOffset: {x: 0, y: 0}
   decalLayerMask: 1
   lightLayerMask: 1
-  underWater: 1
+  underWater: 0
   volumeBounds: {fileID: 0}
   volumeDepth: 1000
   volumePrority: 0
   transitionSize: 0.1
-  absorbtionDistanceMultiplier: 5
+  absorbtionDistanceMultiplier: 2
 --- !u!4 &2081138440
 Transform:
   m_ObjectHideFlags: 0
