@@ -31,10 +31,85 @@ public partial class DayNightCycle : MonoBehaviour
 
         public AnimationCurve sunRotation;
         public AnimationCurve moonRotation;
-
         public AnimationCurve sunLensFlare;
 
+        public AnimationCurve waterDistantWindSpeed;
+        public AnimationCurve waterLocalWindSpeed;
+        public Gradient waterRefractingColor;
+        public Gradient waterScatteringColor;
+
         public ConfigControl() { }
+
+        public void SetUpWater(WaterConfig config, float tSunRise, float tSunSet)
+        {
+            float[] ts = new float[]
+            {
+                0f,
+                Mathf.Clamp(tSunRise - 0.05f, 0.0f, 1.0f),
+                tSunRise,
+                Mathf.Clamp(tSunRise + 0.05f, 0.0f, 1.0f),
+                0.5f,
+                Mathf.Clamp(tSunSet - 0.05f, 0.0f, 1.0f),
+                tSunSet,
+                Mathf.Clamp(tSunSet + 0.05f, 0.0f, 1.0f),
+                1f
+            };
+
+            {
+                Keyframe[] keys = new Keyframe[]
+                {
+                    new Keyframe(ts[0],config.simulation.nightDistantWindSpeed, 0.0f, 0.0f),
+                    new Keyframe(ts[4],config.simulation.dayDistantWindSpeed, 0.0f, 0.0f),
+                    new Keyframe(ts[8],config.simulation.nightDistantWindSpeed, 0.0f, 0.0f),
+                };
+                waterDistantWindSpeed = new AnimationCurve(keys);
+            }
+            {
+                Keyframe[] keys = new Keyframe[]
+                {
+                    new Keyframe(ts[0],config.simulation.nightLocalWindSpeed, 0.0f, 0.0f),
+                    new Keyframe(ts[4],config.simulation.dayLocalWindSpeed, 0.0f, 0.0f),
+                    new Keyframe(ts[8],config.simulation.nightLocalWindSpeed, 0.0f, 0.0f),
+                };
+                waterLocalWindSpeed = new AnimationCurve(keys);
+            }
+            {
+                waterRefractingColor = new Gradient();
+                waterRefractingColor.mode = GradientMode.Blend;
+                waterRefractingColor.colorSpace = ColorSpace.Linear;
+                waterRefractingColor.alphaKeys = new GradientAlphaKey[]
+                {
+                    new GradientAlphaKey(1, 0),
+                    new GradientAlphaKey(1, 1)
+                };
+                waterRefractingColor.colorKeys = new GradientColorKey[]
+                {
+                    new GradientColorKey(config.appearance.nightRefractionColor,ts[0]),
+                    new GradientColorKey(config.appearance.sunRiseRefractionColor,ts[2]),
+                    new GradientColorKey(config.appearance.dayRefractionColor,ts[4]),
+                    new GradientColorKey(config.appearance.sunSetRefractionColor,ts[6]),
+                    new GradientColorKey(config.appearance.nightRefractionColor,ts[8]),
+                };
+            }
+            {
+                waterScatteringColor = new Gradient();
+                waterScatteringColor.mode = GradientMode.Blend;
+                waterScatteringColor.colorSpace = ColorSpace.Linear;
+                waterScatteringColor.alphaKeys = new GradientAlphaKey[]
+                {
+                    new GradientAlphaKey(1, 0),
+                    new GradientAlphaKey(1, 1)
+                };
+                waterScatteringColor.colorKeys = new GradientColorKey[]
+                {
+                    new GradientColorKey(config.appearance.nightScatteringColor,ts[0]),
+                    new GradientColorKey(config.appearance.sunRiseScatteringColor,ts[2]),
+                    new GradientColorKey(config.appearance.dayScatteringColor,ts[4]),
+                    new GradientColorKey(config.appearance.sunSetScatteringColor,ts[6]),
+                    new GradientColorKey(config.appearance.nightScatteringColor,ts[8]),
+                };
+            }
+        }
 
         public void SetUpLensFlare(float tSunRise, float tSunSet)
         {

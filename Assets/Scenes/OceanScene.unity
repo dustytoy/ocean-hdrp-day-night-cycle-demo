@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 675.014, g: 483.29523, b: 405.3897, a: 1}
+  m_IndirectSpecularColor: {r: 674.25446, g: 483.2625, b: 406.7198, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -175,7 +175,7 @@ MonoBehaviour:
   globalVolumn: {fileID: 128746228}
   sky: {fileID: 0}
   clouds: {fileID: 0}
-  ocean: {fileID: 2081138439}
+  water: {fileID: 2081138439}
   config:
     startTime:
       hour: 0
@@ -247,6 +247,21 @@ MonoBehaviour:
         dayScatteringTint: {r: 0.6981132, g: 0.64981604, b: 0.64981604, a: 1}
         sunSetScatteringTint: {r: 0.5377358, g: 0.5269749, b: 0.52082586, a: 1}
         nightScatteringTint: {r: 0.41823897, g: 0.4819883, b: 0.5, a: 1}
+    water:
+      simulation:
+        dayDistantWindSpeed: 100
+        nightDistantWindSpeed: 200
+        dayLocalWindSpeed: 8
+        nightLocalWindSpeed: 16
+      appearance:
+        sunRiseRefractionColor: {r: 0.10196079, g: 0.5019608, b: 0.5019608, a: 1}
+        dayRefractionColor: {r: 0.101960786, g: 0.5019608, b: 0.5019608, a: 1}
+        sunSetRefractionColor: {r: 0.10196079, g: 0.5019608, b: 0.5019608, a: 1}
+        nightRefractionColor: {r: 0.101960786, g: 0.5019608, b: 0.5019608, a: 1}
+        sunRiseScatteringColor: {r: 0, g: 0.40000004, b: 0.40000004, a: 1}
+        dayScatteringColor: {r: 0, g: 0.40000004, b: 0.40000004, a: 1}
+        sunSetScatteringColor: {r: 0, g: 0.40000004, b: 0.40000004, a: 1}
+        nightScatteringColor: {r: 0, g: 0.4, b: 0.4, a: 1}
   configSample:
     sunAngularDiameter:
       serializedVersion: 2
@@ -596,6 +611,78 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    waterDistantWindSpeed:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    waterLocalWindSpeed:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    waterRefractingColor:
+      serializedVersion: 2
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: -1
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    waterScatteringColor:
+      serializedVersion: 2
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: -1
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
 --- !u!1 &128746227
 GameObject:
   m_ObjectHideFlags: 0
@@ -1507,11 +1594,11 @@ MonoBehaviour:
   maxRefractionDistance: 0.5
   absorptionDistance: 100
   scatteringColor: {r: 0, g: 0.4, b: 0.4, a: 1}
-  ambientScattering: 0.2
-  heightScattering: 0.2
-  displacementScattering: 0.1
-  directLightTipScattering: 0.6
-  directLightBodyScattering: 0.5
+  ambientScattering: 0
+  heightScattering: 0.6
+  displacementScattering: 0.6
+  directLightTipScattering: 1
+  directLightBodyScattering: 0.2
   caustics: 0
   causticsIntensity: 0.5
   causticsPlaneBlendDistance: 1

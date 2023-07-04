@@ -22,7 +22,7 @@ public partial class DayNightCycle : MonoBehaviour
     public Volume globalVolumn;
     public PhysicallyBasedSky sky;
     public VolumetricClouds clouds;
-    public WaterSurface ocean;
+    public WaterSurface water;
 
     public DayNightConfig config;
     public ConfigControl configSample;
@@ -76,7 +76,7 @@ public partial class DayNightCycle : MonoBehaviour
         float t = (float)currentTick / MyTime.TotalTicks;
         Evaluate(t);
 
-        ocean.timeMultiplier = gameSecondPerRealSecond;
+        water.timeMultiplier = gameSecondPerRealSecond;
         _overrideWindSpeed.customValue = gameSecondPerRealSecond * 1;
         clouds.globalWindSpeed.Override(_overrideWindSpeed);
 
@@ -103,6 +103,7 @@ public partial class DayNightCycle : MonoBehaviour
         EvaluateLight(t);
         EvaluateSky(t);
         EvaluateClouds(t);
+        EvaluateWater(t);
     }
 
     public void EvaluateLight(float t)
@@ -171,6 +172,13 @@ public partial class DayNightCycle : MonoBehaviour
         clouds.sunLightDimmer.value             = Mathf.Clamp(configSample.cloudLightDimmer.Evaluate(t) * light.maxLightDimmer, light.minLightDimmer, light.maxLightDimmer);
         clouds.scatteringTint.value             = configSample.cloudScatteringTint.Evaluate(t);
     }
+    public void EvaluateWater(float t)
+    {
+        water.largeWindSpeed    = configSample.waterDistantWindSpeed.Evaluate(t);
+        water.ripplesWindSpeed  = configSample.waterLocalWindSpeed.Evaluate(t);
+        water.refractionColor   = configSample.waterRefractingColor.Evaluate(t);
+        water.scatteringColor   = configSample.waterScatteringColor.Evaluate(t);
+    }
     public void Setup()
     {
         // Setup Timings
@@ -196,6 +204,7 @@ public partial class DayNightCycle : MonoBehaviour
         configSample.SetupCloud  (config.cloud, _tSunRise, _tSunSet);
         configSample.SetUpRotationCurve(_tSunRise, _tSunSet);
         configSample.SetUpLensFlare(_tSunRise, _tSunSet);
+        configSample.SetUpWater(config.water, _tSunRise, _tSunSet);
     }
 
     private void OnSunSet(long ticks)

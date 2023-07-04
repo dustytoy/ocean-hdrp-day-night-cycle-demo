@@ -13,6 +13,7 @@ public partial class DayNightCycle : MonoBehaviour
         public LightConfig moonLight;
         public SkyConfig sky;
         public CloudConfig cloud;
+        public WaterConfig water;
     }
 
     // Per half day. 1 sun and 1 moon
@@ -82,6 +83,35 @@ public partial class DayNightCycle : MonoBehaviour
             public Color dayScatteringTint;
             public Color sunSetScatteringTint;
             public Color nightScatteringTint;
+        }
+    }
+
+    [Serializable]
+    public struct WaterConfig
+    {
+        public Simulation simulation;
+        public Appearance appearance;
+        [Serializable]
+        public struct Simulation
+        {
+            public float dayDistantWindSpeed;
+            public float nightDistantWindSpeed;
+
+            public float dayLocalWindSpeed;
+            public float nightLocalWindSpeed;
+        }
+        [Serializable]
+        public struct Appearance
+        {
+            public Color sunRiseRefractionColor;
+            public Color dayRefractionColor;
+            public Color sunSetRefractionColor;
+            public Color nightRefractionColor;
+
+            public Color sunRiseScatteringColor;
+            public Color dayScatteringColor;
+            public Color sunSetScatteringColor;
+            public Color nightScatteringColor;
         }
     }
 }
