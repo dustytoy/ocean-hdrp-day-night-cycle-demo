@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 622.40326, g: 427.5318, b: 327.28958, a: 1}
+  m_IndirectSpecularColor: {r: 641.99384, g: 440.12604, b: 326.15872, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -179,7 +179,7 @@ MonoBehaviour:
   water: {fileID: 2081138439}
   config:
     startTime:
-      hour: 6
+      hour: 0
       minute: 0
       second: 0
     sunRiseTime:
@@ -1952,56 +1952,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dock Thing
       objectReference: {fileID: 0}
-    - target: {fileID: 2508101160321832628, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -10.528627
-      objectReference: {fileID: 0}
-    - target: {fileID: 2508101160321832628, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 31.910454
-      objectReference: {fileID: 0}
-    - target: {fileID: 5338927345253227910, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -15.109436
-      objectReference: {fileID: 0}
-    - target: {fileID: 5338927345253227910, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 48.899284
-      objectReference: {fileID: 0}
-    - target: {fileID: 5981127580021151177, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -16.991905
-      objectReference: {fileID: 0}
-    - target: {fileID: 5981127580021151177, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 32.680588
-      objectReference: {fileID: 0}
-    - target: {fileID: 6089231152671976991, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 22.226835
-      objectReference: {fileID: 0}
-    - target: {fileID: 6089231152671976991, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 42.03244
-      objectReference: {fileID: 0}
-    - target: {fileID: 6226286483108663985, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -3.6201615
-      objectReference: {fileID: 0}
-    - target: {fileID: 6226286483108663985, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 8.390482
-      objectReference: {fileID: 0}
     - target: {fileID: 6653945164103948087, guid: 7aea587ff24441e4884dee671b27c22b,
         type: 3}
       propertyPath: m_RootOrder
@@ -2056,41 +2006,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7105853327627339063, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -4.0430026
-      objectReference: {fileID: 0}
-    - target: {fileID: 7105853327627339063, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 28.000494
-      objectReference: {fileID: 0}
-    - target: {fileID: 8742926436989165713, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 2.5978804
-      objectReference: {fileID: 0}
-    - target: {fileID: 8742926436989165713, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 9.194827
-      objectReference: {fileID: 0}
-    - target: {fileID: 8742926436989165713, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 54.541492
-      objectReference: {fileID: 0}
-    - target: {fileID: 8779945376393763358, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 6.241856
-      objectReference: {fileID: 0}
-    - target: {fileID: 8779945376393763358, guid: 7aea587ff24441e4884dee671b27c22b,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 13.271332
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
