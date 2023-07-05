@@ -1060,7 +1060,7 @@ Transform:
   - {fileID: 8002264680419333305}
   - {fileID: 272993188807782130}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &6982812146204527121
 Animator:
@@ -1189,6 +1189,24 @@ MonoBehaviour:
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
+  activateDebug:
+    m_Name: Activate Debug
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 90b2858b-3dec-4bd3-b3bd-1ed82b6de37e
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 5c1deb07-9894-4edb-b10d-6038aa4a4565
+      m_Path: <Keyboard>/enter
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Activate Debug
+      m_Flags: 0
+    m_Flags: 0
+  debugMode: 0
 --- !u!114 &4416926081852918493
 MonoBehaviour:
   m_ObjectHideFlags: 0

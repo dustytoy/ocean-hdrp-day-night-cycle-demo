@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6b911390c5825014e8377183a7837d3f, type: 2}
+  - {fileID: 2100000, guid: 7826d04f8c436db48907d482bbc0930f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -340,6 +340,16 @@ MonoBehaviour:
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
+  activateDebug:
+    m_Name: Activate Debug
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: e9f099b5-89a1-44e3-ba7d-8a41aec84440
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  debugMode: 0
 --- !u!1 &6074239116653777065
 GameObject:
   m_ObjectHideFlags: 0

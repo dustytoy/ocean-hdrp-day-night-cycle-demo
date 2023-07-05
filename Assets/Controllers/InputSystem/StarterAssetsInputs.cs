@@ -20,8 +20,12 @@ namespace StarterAssets
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
+		[Header("Debug Settings")]
+		public InputAction activateDebug;
+        public bool debugMode = false;
+
 #if ENABLE_INPUT_SYSTEM
-		public void OnMove(InputValue value)
+        public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());
 		}
@@ -43,6 +47,32 @@ namespace StarterAssets
 		{
 			SprintInput(value.isPressed);
 		}
+
+#if DEBUG
+		private void Awake()
+        {
+			activateDebug.performed += OnActivateDebug;
+			activateDebug.Enable();
+        }
+        private void OnDestroy()
+        {
+            activateDebug.performed -= OnActivateDebug;
+            activateDebug.Disable();
+        }
+        public void OnActivateDebug(InputAction.CallbackContext ctx)
+		{
+			if(debugMode)
+			{
+				debugMode = false;
+				SetCursorState(true, true);
+            }
+            else
+			{
+				debugMode = true;
+                SetCursorState(false,false);
+            }
+        }
+#endif
 #endif
 
 
@@ -68,12 +98,13 @@ namespace StarterAssets
 
 		private void OnApplicationFocus(bool hasFocus)
 		{
-			SetCursorState(cursorLocked);
+			SetCursorState(cursorLocked, true);
 		}
 
-		private void SetCursorState(bool newState)
+		private void SetCursorState(bool newState, bool cursorInputForLook)
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+			this.cursorInputForLook = cursorInputForLook;
 		}
 	}
 	
