@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -6,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
 // Reference from https://docs.unity3d.com/Packages/com.unity.render-pipelines.high-definition@14.0/manual/WaterSystem-scripting.html
-
+[DefaultExecutionOrder(100)]
 public class FitToWaterSurface_Burst : MonoBehaviour
 {
     // Public parameters
