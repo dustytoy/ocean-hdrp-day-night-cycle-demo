@@ -67,7 +67,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.startTime.hour
-    value: 0
+    value: 6
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.startTime.minute
@@ -615,15 +615,15 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.cloud.lighting.nightScatteringTint.r
-    value: 0.47086743
+    value: 0.67058825
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.cloud.lighting.nightScatteringTint.g
-    value: 0.56931645
+    value: 0.67058825
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.cloud.lighting.nightScatteringTint.b
-    value: 0.6037736
+    value: 0.67058825
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.cloud.lighting.nightScatteringTint.a
@@ -631,11 +631,11 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.simulation.dayDistantWindSpeed
-    value: 100
+    value: 20
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.simulation.nightDistantWindSpeed
-    value: 200
+    value: 50
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.simulation.dayLocalWindSpeed
@@ -647,15 +647,15 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.appearance.sunRiseRefractionColor.r
-    value: 0.42114624
+    value: 0.13765274
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.appearance.sunRiseRefractionColor.g
-    value: 0.735849
+    value: 0.5471698
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.appearance.sunRiseRefractionColor.b
-    value: 0.735849
+    value: 0.5471698
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.appearance.sunRiseRefractionColor.a
@@ -679,15 +679,15 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.appearance.sunSetRefractionColor.r
-    value: 0.41960788
+    value: 0.13725491
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.appearance.sunSetRefractionColor.g
-    value: 0.7372549
+    value: 0.54901963
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.appearance.sunSetRefractionColor.b
-    value: 0.7372549
+    value: 0.54901963
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.appearance.sunSetRefractionColor.a
@@ -711,15 +711,15 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.appearance.sunRiseScatteringColor.r
-    value: 0.41960788
+    value: 0.13725491
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.appearance.sunRiseScatteringColor.g
-    value: 0.7372549
+    value: 0.54901963
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.appearance.sunRiseScatteringColor.b
-    value: 0.7372549
+    value: 0.54901963
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.appearance.sunRiseScatteringColor.a
@@ -743,15 +743,15 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.appearance.sunSetScatteringColor.r
-    value: 0.41960788
+    value: 0.13725491
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.appearance.sunSetScatteringColor.g
-    value: 0.7372549
+    value: 0.54901963
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.appearance.sunSetScatteringColor.b
-    value: 0.7372549
+    value: 0.54901963
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: config.water.appearance.sunSetScatteringColor.a
