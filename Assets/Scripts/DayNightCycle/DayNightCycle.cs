@@ -6,7 +6,7 @@ using UnityEngine.Rendering.HighDefinition;
 
 public partial class DayNightCycle : MonoBehaviour
 {
-    [Range(1f, 10000f)]
+    [Range(1f, 50000f)]
     public int gameSecondPerRealSecond;
     [HideInInspector]
     public long currentTick;
@@ -96,7 +96,7 @@ public partial class DayNightCycle : MonoBehaviour
         _style.fontSize = 20;
         _style.normal.textColor = Color.black;
         _style.normal.background = Texture2D.grayTexture;
-        gameSecondPerRealSecond = Mathf.RoundToInt(GUI.HorizontalSlider(new Rect(0f, 0f, 600f, 30f), (float)gameSecondPerRealSecond, 1f, 10000f));
+        gameSecondPerRealSecond = Mathf.RoundToInt(GUI.HorizontalSlider(new Rect(0f, 0f, 600f, 30f), (float)gameSecondPerRealSecond, 1f, 50000f));
         if (GUI.Button(new Rect(0f, 30f, 60f, 30f), "debug"))
         {
             _displayGui = !_displayGui;

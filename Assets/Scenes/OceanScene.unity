@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 674.4842, g: 483.27863, b: 406.38385, a: 1}
+  m_IndirectSpecularColor: {r: 672.53644, g: 482.61285, b: 408.6231, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -227,9 +227,9 @@ MonoBehaviour:
       lightEmission:
         maxIntensity: 10
         minIntensity: 0
-        sunRiseEmissionColor: {r: 0.5566038, g: 0.5407241, b: 0.49709266, a: 1}
-        peakEmissionColor: {r: 0.06556306, g: 0.12133873, b: 0.122641504, a: 1}
-        sunSetEmissionColor: {r: 0.51495194, g: 0.6226415, b: 0.6226415, a: 1}
+        sunRiseEmissionColor: {r: 0.3863771, g: 0.41150466, b: 0.41509432, a: 1}
+        peakEmissionColor: {r: 0, g: 0, b: 0, a: 1}
+        sunSetEmissionColor: {r: 0.38823533, g: 0.41176474, b: 0.4156863, a: 1}
     sky:
       artisticOverrides:
         dayZenithTint: {r: 1, g: 0.9213398, b: 0.70440245, a: 1}
@@ -240,14 +240,14 @@ MonoBehaviour:
         nightHorizonTint: {r: 0.19173488, g: 0.20768297, b: 0.21698111, a: 1}
     cloud:
       lighting:
-        maxAmbientDimmer: 0.5
-        minAmbientDimmer: 0.3
-        maxLightDimmer: 0.7
+        maxAmbientDimmer: 1
+        minAmbientDimmer: 0.5
+        maxLightDimmer: 1
         minLightDimmer: 0.5
-        sunRiseScatteringTint: {r: 0.5, g: 0.4654088, b: 0.4654088, a: 1}
-        dayScatteringTint: {r: 0.6981132, g: 0.64981604, b: 0.64981604, a: 1}
-        sunSetScatteringTint: {r: 0.5377358, g: 0.5269749, b: 0.52082586, a: 1}
-        nightScatteringTint: {r: 0.41823897, g: 0.4819883, b: 0.5, a: 1}
+        sunRiseScatteringTint: {r: 0.764151, g: 0.39409038, b: 0.39409038, a: 1}
+        dayScatteringTint: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 1}
+        sunSetScatteringTint: {r: 0.8207547, g: 0.68667614, b: 0.46974006, a: 1}
+        nightScatteringTint: {r: 0.67058825, g: 0.67058825, b: 0.67058825, a: 1}
     water:
       simulation:
         dayDistantWindSpeed: 100
@@ -255,13 +255,13 @@ MonoBehaviour:
         dayLocalWindSpeed: 8
         nightLocalWindSpeed: 16
       appearance:
-        sunRiseRefractionColor: {r: 0.10196079, g: 0.5019608, b: 0.5019608, a: 1}
+        sunRiseRefractionColor: {r: 0.42114624, g: 0.735849, b: 0.735849, a: 1}
         dayRefractionColor: {r: 0.101960786, g: 0.5019608, b: 0.5019608, a: 1}
-        sunSetRefractionColor: {r: 0.10196079, g: 0.5019608, b: 0.5019608, a: 1}
+        sunSetRefractionColor: {r: 0.41960788, g: 0.7372549, b: 0.7372549, a: 1}
         nightRefractionColor: {r: 0.101960786, g: 0.5019608, b: 0.5019608, a: 1}
-        sunRiseScatteringColor: {r: 0, g: 0.40000004, b: 0.40000004, a: 1}
+        sunRiseScatteringColor: {r: 0.41960788, g: 0.7372549, b: 0.7372549, a: 1}
         dayScatteringColor: {r: 0, g: 0.40000004, b: 0.40000004, a: 1}
-        sunSetScatteringColor: {r: 0, g: 0.40000004, b: 0.40000004, a: 1}
+        sunSetScatteringColor: {r: 0.41960788, g: 0.7372549, b: 0.7372549, a: 1}
         nightScatteringColor: {r: 0, g: 0.4, b: 0.4, a: 1}
     fog:
       dayMaxHeight: 0

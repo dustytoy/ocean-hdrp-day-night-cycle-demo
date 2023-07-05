@@ -506,7 +506,9 @@ public partial class DayNightCycle : MonoBehaviour
                 Keyframe[] keys = new Keyframe[]
                 {
                     new Keyframe(ts[0],config.lighting.minAmbientDimmer, 0.0f, 0.0f),
-                    new Keyframe(ts[4],config.lighting.maxAmbientDimmer, 0.0f, 0.0f),
+                    new Keyframe(ts[1],config.lighting.maxAmbientDimmer * 0.8f, 0.0f, 3.0f),
+                    new Keyframe(ts[4],config.lighting.maxAmbientDimmer * 1.0f, 0.0f, 0.0f),
+                    new Keyframe(ts[7],config.lighting.maxAmbientDimmer * 0.8f, -3.0f, 0.0f),
                     new Keyframe(ts[8],config.lighting.minAmbientDimmer, 0.0f, 0.0f)
                 };
                 cloudAmbientDimmer = new AnimationCurve(keys);
@@ -515,7 +517,9 @@ public partial class DayNightCycle : MonoBehaviour
                 Keyframe[] keys = new Keyframe[]
                 {
                     new Keyframe(ts[0],config.lighting.minLightDimmer, 0.0f, 0.0f),
-                    new Keyframe(ts[4],config.lighting.maxLightDimmer, 0.0f, 0.0f),
+                    new Keyframe(ts[1],config.lighting.maxLightDimmer * 0.8f, 0.0f, 3.0f),
+                    new Keyframe(ts[4],config.lighting.maxLightDimmer * 1.0f, 0.0f, 0.0f),
+                    new Keyframe(ts[7],config.lighting.maxLightDimmer * 0.8f, -3.0f, 0.0f),
                     new Keyframe(ts[8],config.lighting.minLightDimmer, 0.0f, 0.0f)
                 };
                 cloudLightDimmer = new AnimationCurve(keys);
@@ -532,9 +536,9 @@ public partial class DayNightCycle : MonoBehaviour
                 cloudScatteringTint.colorKeys = new GradientColorKey[]
                 {
                     new GradientColorKey(config.lighting.nightScatteringTint,ts[0]),
-                    new GradientColorKey(config.lighting.sunRiseScatteringTint,ts[2]),
+                    new GradientColorKey(config.lighting.sunRiseScatteringTint,ts[1]),
                     new GradientColorKey(config.lighting.dayScatteringTint,ts[4]),
-                    new GradientColorKey(config.lighting.sunSetScatteringTint,ts[6]),
+                    new GradientColorKey(config.lighting.sunSetScatteringTint,ts[7]),
                     new GradientColorKey(config.lighting.nightScatteringTint,ts[8]),
                 };
             }
