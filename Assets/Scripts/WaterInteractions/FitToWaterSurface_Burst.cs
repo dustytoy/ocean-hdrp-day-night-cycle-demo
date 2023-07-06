@@ -14,6 +14,11 @@ public class FitToWaterSurface_Burst : MonoBehaviour
     // List of transform to move
     public Transform[] moveTransform;
 
+    // Sway behaviour 
+    public bool sway;
+    public float swayStrength;
+    public float swaySpeed;
+
     // Input job parameters
     NativeArray<float3> _targetPositionBuffer;
 
@@ -74,6 +79,12 @@ public class FitToWaterSurface_Burst : MonoBehaviour
             var floatOverride = moveTransform[i].GetComponent<FloatConfigOverride>();
             var heightOffset = floatOverride == null ? 0 : floatOverride.heightOffset;
             moveTransform[i].transform.position = new Vector3(moveTransform[i].transform.position.x, _heightBuffer[i] + heightOffset, moveTransform[i].transform.position.z);
+            if(sway)
+            {
+                moveTransform[i].rotation = Quaternion.AngleAxis(moveTransform[i].eulerAngles.y, Vector3.up) *
+                Quaternion.AngleAxis(Mathf.Cos(Time.time * swaySpeed) * swayStrength, Vector3.right) *
+                Quaternion.AngleAxis(Mathf.Sin(Time.time * swaySpeed) * swayStrength, Vector3.forward);
+            }
         }
     }
 
