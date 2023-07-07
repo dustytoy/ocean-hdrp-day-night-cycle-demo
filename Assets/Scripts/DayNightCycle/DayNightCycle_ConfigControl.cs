@@ -262,7 +262,7 @@ public partial class DayNightCycle : MonoBehaviour
                 Keyframe[] keys = new Keyframe[]
                 {
                     new Keyframe(ts[2],Mathf.Clamp(0.0f * config.celestialBody.maxFlareFalloff, config.celestialBody.minFlareFalloff, config.celestialBody.maxFlareFalloff), 0.0f, 0.0f),
-                    new Keyframe(ts[4],Mathf.Clamp(0.0f * config.celestialBody.maxFlareFalloff, config.celestialBody.minFlareFalloff, config.celestialBody.maxFlareFalloff), 0.0f, 0.0f),
+                    new Keyframe(ts[4],Mathf.Clamp(1.0f * config.celestialBody.maxFlareFalloff, config.celestialBody.minFlareFalloff, config.celestialBody.maxFlareFalloff), 0.0f, 0.0f),
                     new Keyframe(ts[6],Mathf.Clamp(0.0f * config.celestialBody.maxFlareFalloff, config.celestialBody.minFlareFalloff, config.celestialBody.maxFlareFalloff), 0.0f, 0.0f)
                 };
                 sunFlareFalloff = new AnimationCurve(keys);

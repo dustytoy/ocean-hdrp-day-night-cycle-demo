@@ -6,9 +6,9 @@ public partial class DayNightCycle : MonoBehaviour
     [Serializable]
     public struct DayNightConfig
     {
-        public MyTime startTime;
-        public MyTime sunRiseTime;
-        public MyTime sunSetTime;
+        public MyTimePerDay startTime;
+        public MyTimePerDay sunriseTime;
+        public MyTimePerDay sunsetTime;
         public LightConfig sunLight;
         public LightConfig moonLight;
         public SkyConfig sky;
