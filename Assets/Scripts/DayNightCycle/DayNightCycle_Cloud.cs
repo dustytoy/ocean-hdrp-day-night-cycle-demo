@@ -4,7 +4,7 @@ using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.Rendering;
 
 [RequireComponent(typeof(Volume))]
-public class DayNightCycle_Cloud : DayNightCycleListener
+public class DayNightCycle_Cloud : DayNightCycle_BaseListener
 {
     public static readonly string EDITOR_SETTINGS_SUBFOLDER = "Cloud/";
 
@@ -16,16 +16,19 @@ public class DayNightCycle_Cloud : DayNightCycleListener
     public DayNightFloat lightDimmer;
     public DayNightColor scatteringTint;
 
-    private Volume _volumn;
-    private VolumetricClouds _cloud;
-    private WindSpeedParameter.WindParamaterValue _overrideWindSpeed;
+    [HideInInspector]
+    public Volume volumn;
+    [HideInInspector]
+    public VolumetricClouds cloud;
+    [HideInInspector]
+    public WindSpeedParameter.WindParamaterValue overrideWindSpeed;
 
     public override void OnTimeChanged(long currentTick)
     {
         float t = MyTimePerDay.GetT(currentTick);
-        _cloud.ambientLightProbeDimmer.Override(ambientDimmer.Evaluate(t));
-        _cloud.sunLightDimmer.Override(lightDimmer.Evaluate(t));
-        _cloud.scatteringTint.Override(scatteringTint.Evaluate(t));
+        cloud.ambientLightProbeDimmer.Override(ambientDimmer.Evaluate(t));
+        cloud.sunLightDimmer.Override(lightDimmer.Evaluate(t));
+        cloud.scatteringTint.Override(scatteringTint.Evaluate(t));
     }
     public override void OnStartPostProcess()
     {
@@ -41,14 +44,14 @@ public class DayNightCycle_Cloud : DayNightCycleListener
 
         Initialize(settings);
 
-        _volumn = GetComponent<Volume>();
-        _volumn.profile.TryGet(out _cloud);
-        _overrideWindSpeed = new WindSpeedParameter.WindParamaterValue();
+        volumn = GetComponent<Volume>();
+        volumn.profile.TryGet(out cloud);
+        overrideWindSpeed = new WindSpeedParameter.WindParamaterValue();
 
         target.onTimeMultiplierChanged += (x) =>
         {
-            _overrideWindSpeed.customValue = x;
-            _cloud.globalWindSpeed.Override(_overrideWindSpeed);
+            overrideWindSpeed.customValue = x;
+            cloud.globalWindSpeed.Override(overrideWindSpeed);
         };
     }
 

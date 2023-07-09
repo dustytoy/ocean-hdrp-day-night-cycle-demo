@@ -4,7 +4,7 @@ using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.Rendering;
 
 [RequireComponent(typeof(Volume))]
-public class DayNightCycle_Fog : DayNightCycleListener
+public class DayNightCycle_Fog : DayNightCycle_BaseListener
 {
     public static readonly string EDITOR_SETTINGS_SUBFOLDER = "Fog/";
 
@@ -15,14 +15,16 @@ public class DayNightCycle_Fog : DayNightCycleListener
     public DayNightFloat baseHeight;
     public DayNightFloat maxHeight;
 
-    private Volume _volumn;
-    private Fog _fog;
+    [HideInInspector]
+    public Volume volumn;
+    [HideInInspector]
+    public Fog fog;
 
     public override void OnTimeChanged(long currentTick)
     {
         float t = MyTimePerDay.GetT(currentTick);
-        _fog.baseHeight.Override(baseHeight.Evaluate(t));
-        _fog.maximumHeight.Override(maxHeight.Evaluate(t));
+        fog.baseHeight.Override(baseHeight.Evaluate(t));
+        fog.maximumHeight.Override(maxHeight.Evaluate(t));
     }
     public override void OnStartPostProcess()
     {
@@ -38,8 +40,8 @@ public class DayNightCycle_Fog : DayNightCycleListener
 
         Initialize(settings);
 
-        _volumn = GetComponent<Volume>();
-        _volumn.profile.TryGet(out _fog);
+        volumn = GetComponent<Volume>();
+        volumn.profile.TryGet(out fog);
     }
 
     public void Initialize(DayNightCycle_FogSettingsSO so)

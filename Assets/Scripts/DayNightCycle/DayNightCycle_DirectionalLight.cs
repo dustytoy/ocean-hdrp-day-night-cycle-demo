@@ -1,10 +1,9 @@
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 
-[RequireComponent(typeof(Light), typeof(HDAdditionalLightData), typeof(LensFlareComponentSRP))]
-public class DayNightCycle_DirectionalLight : DayNightCycleListener
+[RequireComponent(typeof(Light), typeof(HDAdditionalLightData))]
+public class DayNightCycle_DirectionalLight : DayNightCycle_BaseListener
 {
     public static readonly string EDITOR_SETTINGS_SUBFOLDER = "DirectionalLight/";
 
@@ -23,19 +22,19 @@ public class DayNightCycle_DirectionalLight : DayNightCycleListener
     public DayNightColor surfaceTint;
     public DayNightColor emissionColor;
 
-    private HDAdditionalLightData _hdData;
+    [HideInInspector]
+    public HDAdditionalLightData hdData;
 
     public override void OnTimeChanged(long currentTick)
     {
         float t = MyTimePerDay.GetT(currentTick);
-        Debug.Log(t);
         // HDRP Light
-        _hdData.angularDiameter = angularDiameter.Evaluate(t);
-        _hdData.flareSize = flareSize.Evaluate(t);
-        _hdData.flareFalloff = flareFalloff.Evaluate(t);
-        _hdData.intensity = intensity.Evaluate(t);
-        _hdData.surfaceTint = surfaceTint.Evaluate(t);
-        _hdData.color = emissionColor.Evaluate(t);
+        hdData.angularDiameter = angularDiameter.Evaluate(t);
+        hdData.flareSize = flareSize.Evaluate(t);
+        hdData.flareFalloff = flareFalloff.Evaluate(t);
+        hdData.intensity = intensity.Evaluate(t);
+        hdData.surfaceTint = surfaceTint.Evaluate(t);
+        hdData.color = emissionColor.Evaluate(t);
 
         // Rotation
         float angle = rotation.Evaluate(t) * 360f;
@@ -56,7 +55,7 @@ public class DayNightCycle_DirectionalLight : DayNightCycleListener
 
         Initialize(settings);
 
-        _hdData = GetComponent<HDAdditionalLightData>();
+        hdData = GetComponent<HDAdditionalLightData>();
     }
 
     public void Initialize(DayNightCycle_DirectionalLightSettingsSO so)

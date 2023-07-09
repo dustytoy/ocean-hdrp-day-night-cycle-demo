@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 [RequireComponent(typeof(Volume))]
 
-public class DayNightCycle_Sky : DayNightCycleListener
+public class DayNightCycle_Sky : DayNightCycle_BaseListener
 {
     public static readonly string EDITOR_SETTINGS_SUBFOLDER = "Sky/";
 
@@ -16,14 +16,16 @@ public class DayNightCycle_Sky : DayNightCycleListener
     public DayNightColor horizonTint;
     public DayNightColor zenithTint;
 
-    private Volume _volumn;
-    private PhysicallyBasedSky _sky;
+    [HideInInspector]
+    public Volume volumn;
+    [HideInInspector]
+    public PhysicallyBasedSky sky;
 
     public override void OnTimeChanged(long currentTick)
     {
         float t = MyTimePerDay.GetT(currentTick);
-        _sky.horizonTint.Override(horizonTint.Evaluate(t));
-        _sky.zenithTint.Override(zenithTint.Evaluate(t));
+        sky.horizonTint.Override(horizonTint.Evaluate(t));
+        sky.zenithTint.Override(zenithTint.Evaluate(t));
     }
     public override void OnStartPostProcess()
     {
@@ -39,8 +41,8 @@ public class DayNightCycle_Sky : DayNightCycleListener
 
         Initialize(settings);
         
-        _volumn = GetComponent<Volume>();
-        _volumn.profile.TryGet(out _sky);
+        volumn = GetComponent<Volume>();
+        volumn.profile.TryGet(out sky);
     }
 
     public void Initialize(DayNightCycle_SkySettingsSO so)

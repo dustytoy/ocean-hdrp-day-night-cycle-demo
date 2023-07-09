@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "DayNightCycle_FogSettings_Default", menuName = "DayNightCycle/Components/Fog", order = 3)]

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 674.6446, g: 483.33942, b: 406.211, a: 1}
+  m_IndirectSpecularColor: {r: 781.07996, g: 574.1788, b: 474.81256, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -239,7 +239,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0d1017c35704264b81c0f0bd33aae92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
   settings: {fileID: 0}
+  volumn: {fileID: 0}
+  fog: {fileID: 0}
 --- !u!114 &128746231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,7 +255,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52ad6871b8b2a4c4ab8a137a7d0cb748, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
   settings: {fileID: 0}
+  volumn: {fileID: 0}
+  sky: {fileID: 0}
 --- !u!114 &128746232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,7 +271,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c324d790f149abe499b20ab35c013e1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
   settings: {fileID: 0}
+  volumn: {fileID: 0}
+  cloud: {fileID: 0}
+  overrideWindSpeed:
+    mode: 0
+    customValue: 0
+    additiveValue: 0
+    multiplyValue: 0
 --- !u!1 &498917974
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,9 +632,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df8086a9d56759a4282cf302df167b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
   settings: {fileID: 0}
   rotateAngleOffset: 0
   rotateAxis: {x: 0, y: 0, z: 0}
+  hdData: {fileID: 0}
 --- !u!114 &845006297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1453,9 +1469,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df8086a9d56759a4282cf302df167b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
   settings: {fileID: 0}
   rotateAngleOffset: 0
   rotateAxis: {x: 0, y: 0, z: 0}
+  hdData: {fileID: 0}
 --- !u!114 &1417021167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1468,8 +1486,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbfff78def582ac4dbde4ebac3762285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
   settings: {fileID: 0}
   flareDuringDaytime: 1
+  lensFlare: {fileID: 0}
 --- !u!4 &1738842790 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6667798580168797808, guid: 7aea587ff24441e4884dee671b27c22b,
@@ -1647,7 +1667,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bba9e43daac54b4d85879a5ee7de5bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
   settings: {fileID: 0}
+  water: {fileID: 0}
 --- !u!4 &97170222052983502 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 158602887440897153, guid: ed8bc204c504a4b40a7bee641bbf9475,

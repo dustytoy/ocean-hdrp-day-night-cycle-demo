@@ -1,9 +1,9 @@
 using UnityEngine;
 
 [DefaultExecutionOrder(0)]
-public abstract class DayNightCycleListener : MonoBehaviour
+public abstract class DayNightCycle_BaseListener : MonoBehaviour
 {
-    protected DayNightCycle target;
+    public DayNightCycle target;
 
     private void Awake()
     {
@@ -11,17 +11,25 @@ public abstract class DayNightCycleListener : MonoBehaviour
     }
     private void Start()
     {
-        target.onTimeChanged += OnTimeChanged;
-        target.onSunrise += OnSunrise;
-        target.onSunset += OnSunset;
+        OnStartEventSubscribe();
         OnStartPostProcess();
     }
     private void OnDestroy()
     {
+        OnDestroyEventUnsubscribe();
+        OnDestroyPostProcess();
+    }
+    public void OnStartEventSubscribe()
+    {
+        target.onTimeChanged += OnTimeChanged;
+        target.onSunrise += OnSunrise;
+        target.onSunset += OnSunset;
+    }
+    public void OnDestroyEventUnsubscribe()
+    {
         target.onTimeChanged -= OnTimeChanged;
         target.onSunrise -= OnSunrise;
         target.onSunset -= OnSunset;
-        OnDestroyPostProcess();
     }
     public abstract void OnTimeChanged(long currentTick);
     public virtual void OnSunrise(long currentTick) { }

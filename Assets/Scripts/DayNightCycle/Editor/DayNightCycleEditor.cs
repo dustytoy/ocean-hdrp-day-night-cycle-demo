@@ -2,9 +2,9 @@
 using UnityEditor;
 
 [CustomEditor(typeof(DayNightCycle))]
-public class DayNightCycleEditor : Editor
+public class DayNightCycleEditor : DayNightCycle_BaseEditor
 {
-    public override void OnInspectorGUI()
+    public override void EditMode_Impl()
     {
         var editor = target as DayNightCycle;
         EditorGUILayout.BeginHorizontal();
@@ -15,8 +15,6 @@ public class DayNightCycleEditor : Editor
         EditorGUILayout.LabelField($"Current Time: {(MyTimePerDay)editor.currentTick}");
         editor.currentTick = (long)(EditorGUILayout.Slider(MyTimePerDay.GetT(editor.currentTick), 0f, 1f) * MyTimePerDay.TicksPerDay);
         EditorGUILayout.EndHorizontal();
-
-        base.OnInspectorGUI();
     }
 }
 #endif

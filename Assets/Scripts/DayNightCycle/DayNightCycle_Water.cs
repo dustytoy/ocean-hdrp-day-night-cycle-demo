@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
 [RequireComponent(typeof(WaterSurface))]
-public class DayNightCycle_Water : DayNightCycleListener
+public class DayNightCycle_Water : DayNightCycle_BaseListener
 {
     public static readonly string EDITOR_SETTINGS_SUBFOLDER = "Water/";
 
@@ -16,16 +16,17 @@ public class DayNightCycle_Water : DayNightCycleListener
     public DayNightColor refractingColor;
     public DayNightColor scatteringColor;
 
-    private WaterSurface _water;
+    [HideInInspector]
+    public WaterSurface water;
 
     public override void OnTimeChanged(long currentTick)
     {
         float t = MyTimePerDay.GetT(currentTick);
 
-        _water.largeWindSpeed   = distantWindSpeed.Evaluate(t);
-        _water.ripplesWindSpeed = localWindSpeed.Evaluate(t);
-        _water.refractionColor  = refractingColor.Evaluate(t);
-        _water.scatteringColor  = scatteringColor.Evaluate(t);
+        water.largeWindSpeed   = distantWindSpeed.Evaluate(t);
+        water.ripplesWindSpeed = localWindSpeed.Evaluate(t);
+        water.refractionColor  = refractingColor.Evaluate(t);
+        water.scatteringColor  = scatteringColor.Evaluate(t);
     }
     public override void OnStartPostProcess()
     {
@@ -41,11 +42,11 @@ public class DayNightCycle_Water : DayNightCycleListener
 
         Initialize(settings);
 
-        _water = GetComponent<WaterSurface>();
+        water = GetComponent<WaterSurface>();
 
         target.onTimeMultiplierChanged += (x) =>
         {
-            _water.timeMultiplier = x;
+            water.timeMultiplier = x;
         };
     }
 

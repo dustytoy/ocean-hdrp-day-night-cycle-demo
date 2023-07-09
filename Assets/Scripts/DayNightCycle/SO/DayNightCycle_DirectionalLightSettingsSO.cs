@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "DayNightCycle_DirectionalLightSettings_Default", menuName = "DayNightCycle/Components/DirectionalLight", order = 0)]

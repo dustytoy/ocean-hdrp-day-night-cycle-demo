@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "DayNightCycle_WaterSettings_Default", menuName = "DayNightCycle/Components/Water", order = 4)]
