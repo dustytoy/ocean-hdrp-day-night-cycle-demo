@@ -39,6 +39,6 @@ public class DayNightCycle_Fog : DayNightCycle_BaseComponent<Fog, DayNightCycle_
 
     public override string GetDefaultAssetName()
     {
-        return "DayNightCycle_FogSettings_Default.asset";
+        return "DayNightCycle_FogSettings_Default";
     }
 }

@@ -5,8 +5,9 @@ using UnityEngine.Rendering.HighDefinition;
 public class DayNightCycle_DirectionalLight : DayNightCycle_BaseComponent<HDAdditionalLightData, DayNightCycle_DirectionalLightSettingsSO>
 {
     public static readonly string EDITOR_SETTINGS_SUBFOLDER = "DirectionalLight/";
-
+    [HideInInspector]
     public float rotateAngleOffset;
+    [HideInInspector]
     public Vector3 rotateAxis;
 
     [Header("Handles")]
@@ -61,6 +62,6 @@ public class DayNightCycle_DirectionalLight : DayNightCycle_BaseComponent<HDAddi
 
     public override string GetDefaultAssetName()
     {
-        return "DayNightCycle_DirectionalLightSettings_Default.asset";
+        return "DayNightCycle_DirectionalLightSettings_Default";
     }
 }

@@ -46,6 +46,6 @@ public class DayNightCycle_Water : DayNightCycle_BaseComponent<WaterSurface, Day
 
     public override string GetDefaultAssetName()
     {
-        return "DayNightCycle_WaterSettings_Default.asset";
+        return "DayNightCycle_WaterSettings_Default";
     }
 }

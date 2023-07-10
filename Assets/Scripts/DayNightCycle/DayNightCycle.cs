@@ -14,9 +14,12 @@ public partial class DayNightCycle : MonoBehaviour
 
     public string settingsName = "Default";
     public string assetBundleName = "Default";
+
+    [HideInInspector]
     public DayNightCycle_SettingsSO settings;
     [HideInInspector]
     public AssetBundle loadedBundle;
+
     public int timeMultiplier
     {
         get { return _timeMultiplier; }
@@ -155,43 +158,6 @@ public partial class DayNightCycle : MonoBehaviour
             _dayCount++;
         }
     }
-
-//#if DEBUG
-//    private GUIStyle _style = new GUIStyle();
-//    private bool _displayGui;
-//    private void OnGUI()
-//    {
-//        GUI.color = Color.white;
-//        GUI.backgroundColor = Color.white;
-//        _style.fontSize = 20;
-//        _style.normal.textColor = Color.black;
-//        _style.normal.background = Texture2D.grayTexture;
-//        timeMultiplier = Mathf.RoundToInt(GUI.HorizontalSlider(new Rect(0f, 0f, 600f, 30f), (float)timeMultiplier, 1f, 50000f));
-//        if (GUI.Button(new Rect(0f, 30f, 60f, 30f), "debug"))
-//        {
-//            _displayGui = !_displayGui;
-//        }
-//        if(!_displayGui ) { return; }
-
-//        MyTimePerDay time = (MyTimePerDay)currentTick;
-//        GUI.Label(new Rect(0f, 60f, 600f, 400f), $"SunRise: {config.sunriseTime} | Sunset:{config.sunsetTime} | Eastward: {Vector3.right}\n" +
-//            $"Time (t): {time} ({((float)currentTick % MyTimePerDay.TicksPerDay) / MyTimePerDay.TicksPerDay})\n" +
-//            $"TimeMultiplier: {timeMultiplier}\n" +
-//            $"Sun           : {(_sunTransform.gameObject.activeInHierarchy ? "Active" : "Inactive")} (angle {(int)_sunTransform.eulerAngles.x} degrees)\n" +
-//            $"Moon          : {(_moonTransform.gameObject.activeInHierarchy ? "Active" : "Inactive")} (angle {(int)_moonTransform.eulerAngles.x} degrees)\n" +
-//            $"Lens Flare    : {_sunFlare.intensity}\n" +
-//            $"Sky           : Zenith ({sky.zenithTint.value})\n" +
-//            $"                Horizon ({sky.horizonTint.value})\n" +
-//            $"Cloud         : Ambient Dimmer ({clouds.ambientLightProbeDimmer.value})\n" +
-//            $"                Light Source Dimmer ({clouds.sunLightDimmer.value})\n" +
-//            $"                Scattering ({clouds.scatteringTint.value})\n" +
-//            $"                Custom Orientation ({clouds.orientation.value.customValue})\n" +
-//            $"Fog           : Height (base {fog.baseHeight.value}, max {fog.maximumHeight.value})\n" +
-//            $"Water         : Current ({water.largeCurrentSpeedValue}, angle {water.largeCurrentOrientationValue})\n" +
-//            $"                Distant Wind ({water.largeWindSpeed}, angle {water.largeWindOrientationValue} degree)\n" +
-//            $"                Local Wind ({water.ripplesWindSpeed}, angle {water.ripplesWindOrientationValue} degree)\n", _style);
-//    }
-//#endif
    
     public void Initialize(DayNightCycle_SettingsSO so)
     {

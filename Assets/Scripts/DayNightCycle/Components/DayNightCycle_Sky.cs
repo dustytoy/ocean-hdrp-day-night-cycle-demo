@@ -40,6 +40,6 @@ public class DayNightCycle_Sky : DayNightCycle_BaseComponent<PhysicallyBasedSky,
 
     public override string GetDefaultAssetName()
     {
-        return "DayNightCycle_SkySettings_Default.asset";
+        return "DayNightCycle_SkySettings_Default";
     }
 }

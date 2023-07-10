@@ -30,7 +30,6 @@ public abstract class DayNightCycle_BaseEditor : Editor
         }
     }
     private static bool _sharedEditMode = true;
-    private bool _showBaseInspector = false;
 
     public void OnEnable()
     {
@@ -47,15 +46,9 @@ public abstract class DayNightCycle_BaseEditor : Editor
     {
         sharedDayNightCycle = EditorGUILayout.ObjectField(sharedDayNightCycle, typeof(DayNightCycle), true) as DayNightCycle;
         EditMode();
-        Addition_Impl();
-        //_showBaseInspector = EditorGUILayout.BeginFoldoutHeaderGroup(_showBaseInspector, "Base Inspector");
-        _showBaseInspector = EditorGUILayout.BeginToggleGroup("Base Inspector", _showBaseInspector);
-        if(_showBaseInspector)
-        {
-            base.OnInspectorGUI();
-        }
-        //EditorGUILayout.EndFoldoutHeaderGroup();
-        EditorGUILayout.EndToggleGroup();
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Base Inspector");
+        base.OnInspectorGUI();
     }
     public void EditMode()
     {
@@ -68,6 +61,5 @@ public abstract class DayNightCycle_BaseEditor : Editor
 
     }
     public virtual void EditMode_Impl() { }
-    public virtual void Addition_Impl() { }
 }
 #endif

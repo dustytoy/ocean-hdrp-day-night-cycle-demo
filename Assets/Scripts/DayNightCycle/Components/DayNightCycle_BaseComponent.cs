@@ -4,9 +4,13 @@ using UnityEngine;
 [DefaultExecutionOrder(0)]
 public abstract class DayNightCycle_BaseComponent<TComponent,USettings> : MonoBehaviour where TComponent : UnityEngine.Object where USettings : ScriptableObject
 {
+    [HideInInspector]
     public DayNightCycle target;
+    [HideInInspector]
     public TComponent component;
+    [HideInInspector]
     public USettings settings;
+    [HideInInspector]
     public string settingsName = "Default";
 
     private void Awake()
@@ -50,7 +54,7 @@ public abstract class DayNightCycle_BaseComponent<TComponent,USettings> : MonoBe
         {
 #if UNITY_EDITOR
             settings = AssetDatabase.LoadAssetAtPath<USettings>(DayNightCycle.EDITOR_SETTINGS_FOLDER + GetRelativeSubfolderPath() +
-                GetDefaultAssetName());
+                GetDefaultAssetName() + ".asset");
 #else
             settings = DayNightCycle.Instance.loadedBundle.LoadAsset<USettings>(GetDefaultAssetName());
 #endif
@@ -59,7 +63,7 @@ public abstract class DayNightCycle_BaseComponent<TComponent,USettings> : MonoBe
         {
 #if UNITY_EDITOR
             settings = AssetDatabase.LoadAssetAtPath<USettings>(DayNightCycle.EDITOR_SETTINGS_FOLDER + GetRelativeSubfolderPath() +
-                settingsName);
+                settingsName + ".asset");
 #else
             settings = DayNightCycle.Instance.loadedBundle.LoadAsset<USettings>(settingsName);
 #endif

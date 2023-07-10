@@ -6,6 +6,7 @@ public class DayNightCycle_LensFlare : DayNightCycle_BaseComponent<LensFlareComp
 {
     public static readonly string EDITOR_SETTINGS_SUBFOLDER = "LensFlare/";
 
+    [HideInInspector]
     public bool flareDuringDaytime;
 
     [Header("Handles")]
@@ -35,6 +36,7 @@ public class DayNightCycle_LensFlare : DayNightCycle_BaseComponent<LensFlareComp
     {
         intensity = new DayNightFloat(so.intensity);
         scale = new DayNightFloat(so.scale);
+        flareDuringDaytime = so.flareDuringDayTime;
     }
 
     public override string GetRelativeSubfolderPath()
@@ -44,6 +46,6 @@ public class DayNightCycle_LensFlare : DayNightCycle_BaseComponent<LensFlareComp
 
     public override string GetDefaultAssetName()
     {
-        return "DayNightCycle_LensFlareSettings_Default.asset";
+        return "DayNightCycle_LensFlareSettings_Default";
     }
 }

@@ -51,6 +51,6 @@ public class DayNightCycle_Cloud : DayNightCycle_BaseComponent<VolumetricClouds,
 
     public override string GetDefaultAssetName()
     {
-        return "DayNightCycle_CloudSettings_Default.asset";
+        return "DayNightCycle_CloudSettings_Default";
     }
 }
