@@ -12,6 +12,8 @@ public partial class DayNightCycle : MonoBehaviour
     // TODO: bundle all components data into asset bundle for distribution. And maybe share the same bundle
     public static readonly string DEFAULT_ASSET_BUNDLE_NAME = "DefaultDayNight";
 
+    public string settingsName = "Default";
+    public string assetBundleName = "Default";
     public DayNightCycle_SettingsSO settings;
     [HideInInspector]
     public AssetBundle loadedBundle;
@@ -98,7 +100,7 @@ public partial class DayNightCycle : MonoBehaviour
     private void Start()
     {
         // Load setting either from AssetDatabase or from AssetBundle
-        if (settings == null)
+        if (settingsName == "Default")
         {
 #if UNITY_EDITOR
             settings = AssetDatabase.LoadAssetAtPath<DayNightCycle_SettingsSO>(EDITOR_SETTINGS_FOLDER + 
@@ -106,13 +108,30 @@ public partial class DayNightCycle : MonoBehaviour
 #else
             loadedBundle = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, 
             DayNightCycle.PLAYER_SETTINGS_FOLDER, 
-            DayNightCycle.DEFAULT_ASSET_BUNDLE_NAME));
+            assetBundleName == "Default" ? DayNightCycle.DEFAULT_ASSET_BUNDLE_NAME : assetBundleName));
             if (loadedBundle == null)
             {
                 Debug.Log("Failed to load AssetBundle!");
                 return;
             }
             settings = loadedBundle.LoadAsset<DayNightCycleSettingsSO>("DayNightCycleSettings_Default");
+#endif
+        }
+        else
+        {
+#if UNITY_EDITOR
+            settings = AssetDatabase.LoadAssetAtPath<DayNightCycle_SettingsSO>(EDITOR_SETTINGS_FOLDER +
+                $"{settingsName}.asset");
+#else
+            loadedBundle = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, 
+            DayNightCycle.PLAYER_SETTINGS_FOLDER, 
+            assetBundleName == "Default" ? DayNightCycle.DEFAULT_ASSET_BUNDLE_NAME : assetBundleName));
+            if (loadedBundle == null)
+            {
+                Debug.Log("Failed to load AssetBundle!");
+                return;
+            }
+            settings = loadedBundle.LoadAsset<DayNightCycleSettingsSO>(settingsName);
 #endif
         }
 

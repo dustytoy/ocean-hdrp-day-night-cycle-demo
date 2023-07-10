@@ -1,14 +1,11 @@
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
 [RequireComponent(typeof(Light), typeof(HDAdditionalLightData))]
-public class DayNightCycle_DirectionalLight : DayNightCycle_BaseListener
+public class DayNightCycle_DirectionalLight : DayNightCycle_BaseComponent<HDAdditionalLightData, DayNightCycle_DirectionalLightSettingsSO>
 {
     public static readonly string EDITOR_SETTINGS_SUBFOLDER = "DirectionalLight/";
 
-    [Header("Settings")]
-    public DayNightCycle_DirectionalLightSettingsSO settings;
     public float rotateAngleOffset;
     public Vector3 rotateAxis;
 
@@ -22,19 +19,16 @@ public class DayNightCycle_DirectionalLight : DayNightCycle_BaseListener
     public DayNightColor surfaceTint;
     public DayNightColor emissionColor;
 
-    [HideInInspector]
-    public HDAdditionalLightData hdData;
-
     public override void OnTimeChanged(long currentTick)
     {
         float t = MyTimePerDay.GetT(currentTick);
         // HDRP Light
-        hdData.angularDiameter = angularDiameter.Evaluate(t);
-        hdData.flareSize = flareSize.Evaluate(t);
-        hdData.flareFalloff = flareFalloff.Evaluate(t);
-        hdData.intensity = intensity.Evaluate(t);
-        hdData.surfaceTint = surfaceTint.Evaluate(t);
-        hdData.color = emissionColor.Evaluate(t);
+        component.angularDiameter = angularDiameter.Evaluate(t);
+        component.flareSize = flareSize.Evaluate(t);
+        component.flareFalloff = flareFalloff.Evaluate(t);
+        component.intensity = intensity.Evaluate(t);
+        component.surfaceTint = surfaceTint.Evaluate(t);
+        component.color = emissionColor.Evaluate(t);
 
         // Rotation
         float angle = rotation.Evaluate(t) * 360f;
@@ -42,23 +36,10 @@ public class DayNightCycle_DirectionalLight : DayNightCycle_BaseListener
     }
     public override void OnStartPostProcess()
     {
-        // Load setting either from AssetDatabase or from AssetBundle
-        if (settings == null)
-        {
-#if UNITY_EDITOR
-            settings = AssetDatabase.LoadAssetAtPath<DayNightCycle_DirectionalLightSettingsSO>(DayNightCycle.EDITOR_SETTINGS_FOLDER + EDITOR_SETTINGS_SUBFOLDER +
-                "DayNightCycle_DirectionalLightSettings_Default.asset");
-#else
-            settings = DayNightCycle.Instance.loadedBundle.LoadAsset<DayNightCycle_DirectionalLightSettingsSO>("DayNightCycle_DirectionalLightSettings_Default");
-#endif
-        }
-
-        Initialize(settings);
-
-        hdData = GetComponent<HDAdditionalLightData>();
+        component = GetComponent<HDAdditionalLightData>();
     }
 
-    public void Initialize(DayNightCycle_DirectionalLightSettingsSO so)
+    public override void InitializeComponent(DayNightCycle_DirectionalLightSettingsSO so)
     {
         rotateAngleOffset= so.rotateAngleOffset;
         rotateAxis = so.rotateAxis;
@@ -71,5 +52,15 @@ public class DayNightCycle_DirectionalLight : DayNightCycle_BaseListener
         flareTint       = new DayNightColor(so.flareTint);
         surfaceTint     = new DayNightColor(so.surfaceTint);
         emissionColor   = new DayNightColor(so.emissionColor);
+    }
+
+    public override string GetRelativeSubfolderPath()
+    {
+        return EDITOR_SETTINGS_SUBFOLDER;
+    }
+
+    public override string GetDefaultAssetName()
+    {
+        return "DayNightCycle_DirectionalLightSettings_Default.asset";
     }
 }
