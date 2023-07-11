@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 189fb93ab73234c4b95a854cd3a2747d, type: 3}
-  m_Name: DayNightCycle_LensFlareSettings_Default
+  m_Name: SunLensFlare
   m_EditorClassIdentifier: 
   flareDuringDayTime: 1
   intensity:
