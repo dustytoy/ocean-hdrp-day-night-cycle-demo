@@ -1,15 +1,32 @@
 using UnityEngine;
+using System.Collections.Generic;
 
-[DefaultExecutionOrder(1)]
+[DefaultExecutionOrder(-1)]
 public class DayNightCycleController : MonoBehaviour
 {
+    public static DayNightCycleController Instance
+    {
+        get { return _instance; }
+    }
+    private static DayNightCycleController _instance;
+
     [HideInInspector]
     public DayNightCycle dayNightCycle;
+    public List<UnityEngine.Object> components;
     public bool displayGUI;
 
     private void Awake()
     {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
         dayNightCycle = DayNightCycle.Instance;
+        components = new List<UnityEngine.Object>();
     }
 
     private void OnGUI()

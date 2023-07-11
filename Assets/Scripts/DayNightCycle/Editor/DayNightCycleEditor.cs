@@ -31,9 +31,5 @@ public class DayNightCycleEditor : DayNightCycle_BaseEditor
             _cachedSettingEditor.OnInspectorGUI();
         }
     }
-
-    public void OnSceneGUI()
-    {
-    }
 }
 #endif

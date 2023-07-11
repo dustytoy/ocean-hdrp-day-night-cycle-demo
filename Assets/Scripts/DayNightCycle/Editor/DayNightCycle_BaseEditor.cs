@@ -5,6 +5,7 @@ using System;
 public abstract class DayNightCycle_BaseEditor : Editor
 {
     public static DayNightCycle sharedDayNightCycle;
+    public static DayNightCycleController sharedController;
 
     public delegate void OnEditModeOn();
     public delegate void OnEditModeOff();
@@ -41,10 +42,17 @@ public abstract class DayNightCycle_BaseEditor : Editor
                 throw new Exception("There is no DayNightCycle component in the scene");
             }
         }
+        if (sharedController == null)
+        {
+            sharedController = FindObjectOfType<DayNightCycleController>();
+            if (sharedController == null)
+            {
+                throw new Exception("There is no DayNightCycleController component in the scene");
+            }
+        }
     }
     public override void OnInspectorGUI()
     {
-        sharedDayNightCycle = EditorGUILayout.ObjectField(sharedDayNightCycle, typeof(DayNightCycle), true) as DayNightCycle;
         EditMode();
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Base Inspector");

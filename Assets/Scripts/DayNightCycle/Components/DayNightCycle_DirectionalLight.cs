@@ -33,7 +33,7 @@ public class DayNightCycle_DirectionalLight : DayNightCycle_BaseComponent<HDAddi
 
         // Rotation
         float angle = rotation.Evaluate(t) * 360f;
-        transform.rotation = Quaternion.AngleAxis(-90f, Vector3.up) * Quaternion.AngleAxis(target.dayCount * 360f + rotateAngleOffset + angle, rotateAxis);
+        transform.rotation = Quaternion.AngleAxis(-90f, Vector3.up) * Quaternion.AngleAxis(dayNightCycle.dayCount * 360f + rotateAngleOffset + angle, rotateAxis);
     }
     public override void OnStartPostProcess()
     {

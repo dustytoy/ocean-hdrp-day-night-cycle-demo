@@ -5,7 +5,9 @@ using UnityEngine;
 public abstract class DayNightCycle_BaseComponent<TComponent,USettings> : MonoBehaviour where TComponent : UnityEngine.Object where USettings : ScriptableObject
 {
     [HideInInspector]
-    public DayNightCycle target;
+    public DayNightCycle dayNightCycle;
+    [HideInInspector]
+    public DayNightCycleController controller;
     [HideInInspector]
     public TComponent component;
     [HideInInspector]
@@ -15,7 +17,9 @@ public abstract class DayNightCycle_BaseComponent<TComponent,USettings> : MonoBe
 
     private void Awake()
     {
-        target = DayNightCycle.Instance;
+        dayNightCycle = DayNightCycle.Instance;
+        controller = DayNightCycleController.Instance;
+        controller.components.Add(this);
     }
     private void Start()
     {
@@ -31,15 +35,15 @@ public abstract class DayNightCycle_BaseComponent<TComponent,USettings> : MonoBe
     }
     public void OnStartEventSubscribe()
     {
-        target.onTimeChanged += OnTimeChanged;
-        target.onSunrise += OnSunrise;
-        target.onSunset += OnSunset;
+        dayNightCycle.onTimeChanged += OnTimeChanged;
+        dayNightCycle.onSunrise += OnSunrise;
+        dayNightCycle.onSunset += OnSunset;
     }
     public void OnDestroyEventUnsubscribe()
     {
-        target.onTimeChanged -= OnTimeChanged;
-        target.onSunrise -= OnSunrise;
-        target.onSunset -= OnSunset;
+        dayNightCycle.onTimeChanged -= OnTimeChanged;
+        dayNightCycle.onSunrise -= OnSunrise;
+        dayNightCycle.onSunset -= OnSunset;
     }
     public abstract void OnTimeChanged(long currentTick);
     public abstract string GetRelativeSubfolderPath();

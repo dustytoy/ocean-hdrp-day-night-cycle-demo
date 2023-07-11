@@ -30,7 +30,7 @@ public class DayNightCycle_Cloud : DayNightCycle_BaseComponent<VolumetricClouds,
         volumn.profile.TryGet(out component);
         overrideWindSpeed = new WindSpeedParameter.WindParamaterValue();
 
-        target.onTimeMultiplierChanged += (x) =>
+        dayNightCycle.onTimeMultiplierChanged += (x) =>
         {
             overrideWindSpeed.customValue = x;
             component.globalWindSpeed.Override(overrideWindSpeed);

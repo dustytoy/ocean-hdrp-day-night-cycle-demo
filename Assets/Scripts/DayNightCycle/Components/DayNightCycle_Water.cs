@@ -25,7 +25,7 @@ public class DayNightCycle_Water : DayNightCycle_BaseComponent<WaterSurface, Day
     {
         component = GetComponent<WaterSurface>();
 
-        target.onTimeMultiplierChanged += (x) =>
+        dayNightCycle.onTimeMultiplierChanged += (x) =>
         {
             component.timeMultiplier = x;
         };
