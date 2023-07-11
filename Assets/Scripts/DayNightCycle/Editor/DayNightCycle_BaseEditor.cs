@@ -53,13 +53,6 @@ public abstract class DayNightCycle_BaseEditor : Editor
     }
     public override void OnInspectorGUI()
     {
-        EditMode();
-        EditorGUILayout.Space();
-        EditorGUILayout.LabelField("Base Inspector");
-        base.OnInspectorGUI();
-    }
-    public void EditMode()
-    {
         sharedEditMode = EditorGUILayout.BeginToggleGroup("Shared Edit Mode", sharedEditMode);
         if (sharedEditMode)
         {
@@ -67,6 +60,9 @@ public abstract class DayNightCycle_BaseEditor : Editor
         }
         EditorGUILayout.EndToggleGroup();
 
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Base Inspector");
+        base.OnInspectorGUI();
     }
     public virtual void EditMode_Impl() { }
 }

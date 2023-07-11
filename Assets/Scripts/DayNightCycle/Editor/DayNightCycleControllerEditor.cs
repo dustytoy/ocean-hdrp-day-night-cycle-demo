@@ -1,5 +1,5 @@
 #if UNITY_EDITOR
-using System.ComponentModel;
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,26 +7,18 @@ using UnityEngine;
 public class DayNightCycleControllerEditor : DayNightCycle_BaseEditor
 {
     public int componentIndex;
-    public Editor cachedComponentEditor;
-    private Vector2 scrollPosition;
     public override void EditMode_Impl()
     {
         int count = sharedController.components.Count;
 
-        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
         for (int i = 0; i < count; i++)
         {
             var c = sharedController.components[i];
-            if (GUILayout.Button($"{c.name} ({c.GetType().Name})"))
+            if (GUILayout.Button($"{c.name} ({c.GetType()})"))
             {
                 componentIndex = i;
-                Editor.CreateCachedEditor(c, System.Type.GetType($"{c.GetType().Name}Editor"), ref cachedComponentEditor);
+                EditorUtility.OpenPropertyEditor(c);
             }
-        }
-        EditorGUILayout.EndScrollView();
-        if(cachedComponentEditor != null)
-        {
-            System.Type.GetType($"{cachedComponentEditor.GetType().Name}").GetMethod("EditMode_Impl").Invoke(cachedComponentEditor, null);
         }
     }
     public void OnSceneGUI()
@@ -42,7 +34,8 @@ public class DayNightCycleControllerEditor : DayNightCycle_BaseEditor
         GUI.Label(new Rect(50f, 40f, 200f, 30f), $"Time (t): {time} ({time.GetT()})");
         dayNightCycle.currentTick = (long)(GUI.HorizontalSlider(new Rect(250f, 40f, 300f, 30f), MyTimePerDay.GetT(dayNightCycle.currentTick), 0f, 1f) * MyTimePerDay.TicksPerDay);
 
-        GUI.Label(new Rect(50f, 70f, 300f, 30f), $"SunRise: {dayNightCycle.settings.sunriseTime} | Sunset:{dayNightCycle.settings.sunsetTime}");
+        GUI.Label(new Rect(50f, 70f, 500f, 30f), $"SunRise: {dayNightCycle.settings.sunriseTime} ({dayNightCycle.settings.sunriseTime.GetT()}) | " +
+            $"Sunset:{dayNightCycle.settings.sunsetTime} ({dayNightCycle.settings.sunsetTime.GetT()})");
         Handles.EndGUI();
 
         // No OnSceneGUI yet
