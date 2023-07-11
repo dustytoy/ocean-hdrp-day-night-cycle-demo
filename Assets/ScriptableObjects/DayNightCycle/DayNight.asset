@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfc0077d2a6e79649bd8caaa9dd45410, type: 3}
+  m_Name: DayNight
+  m_EditorClassIdentifier: 
+  startTime:
+    hour: 0
+    minute: 0
+    second: 0
+  sunriseTime:
+    hour: 6
+    minute: 0
+    second: 0
+  sunsetTime:
+    hour: 18
+    minute: 0
+    second: 0

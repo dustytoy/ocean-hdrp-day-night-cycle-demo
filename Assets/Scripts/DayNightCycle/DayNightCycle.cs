@@ -19,7 +19,6 @@ public partial class DayNightCycle : MonoBehaviour
     public DayNightCycle_SettingsSO settings;
     [HideInInspector]
     public AssetBundle loadedBundle;
-
     public int timeMultiplier
     {
         get { return _timeMultiplier; }

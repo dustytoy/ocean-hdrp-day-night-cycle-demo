@@ -11,6 +11,7 @@ public abstract class DayNightCycle_BaseEditor : Editor
     public delegate void OnEditModeOff();
     public static event OnEditModeOn onEditModeOn;
     public static event OnEditModeOff onEditModeOff;
+
     public static bool sharedEditMode
     {
         get
@@ -20,7 +21,7 @@ public abstract class DayNightCycle_BaseEditor : Editor
         set
         {
             _sharedEditMode = value;
-            if(_sharedEditMode)
+            if (_sharedEditMode)
             {
                 onEditModeOn?.Invoke();
             }
@@ -50,20 +51,24 @@ public abstract class DayNightCycle_BaseEditor : Editor
                 throw new Exception("There is no DayNightCycleController component in the scene");
             }
         }
+        OnEnable_Impl();
+    }
+    public void OnDisable()
+    {
+        OnDisable_Impl();
+    }
+    public void OnSceneGUI()
+    {
+        OnSceneGUI_Impl();
     }
     public override void OnInspectorGUI()
     {
-        sharedEditMode = EditorGUILayout.BeginToggleGroup("Shared Edit Mode", sharedEditMode);
-        if (sharedEditMode)
-        {
-            EditMode_Impl();
-        }
-        EditorGUILayout.EndToggleGroup();
-
-        EditorGUILayout.Space();
-        EditorGUILayout.LabelField("Base Inspector");
-        base.OnInspectorGUI();
+        OnInspectorGUI_Impl();
     }
-    public virtual void EditMode_Impl() { }
+    public virtual void OnInspectorGUI_Impl() { }
+    public virtual void OnEnable_Impl() { }
+    public virtual void OnDisable_Impl() { }
+    public virtual void OnSceneGUI_Impl() { }
+
 }
 #endif

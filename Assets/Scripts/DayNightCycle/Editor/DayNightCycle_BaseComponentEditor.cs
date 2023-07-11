@@ -6,215 +6,94 @@ using UnityEngine;
 
 public abstract class DayNightCycle_BaseComponentEditor<D,T,U> : DayNightCycle_BaseEditor where D : DayNightCycle_BaseComponent<T, U> where T : UnityEngine.Object where U : UnityEngine.ScriptableObject
 {
-    protected Editor cachedSettingEditor;
-    protected float transitionSize;
     protected string cloneName = "Clone";
-    private new void OnEnable()
+    protected SerializedProperty component;
+    protected SerializedProperty settings;
+    protected SerializedProperty settingsName;
+
+    private D _target;
+    private bool _disabledGroup;
+
+    public override void OnEnable_Impl()
     {
-        base.OnEnable();
-        var component = target as D;
-        component.dayNightCycle = sharedDayNightCycle;
-        component.controller = sharedController;
+        component = serializedObject.FindProperty("component");
+        settings = serializedObject.FindProperty("settings");
+        settingsName = serializedObject.FindProperty("settingsName");
+
+        _target = target as D;
+        _target.dayNightCycle = sharedDayNightCycle;
+        _target.controller = sharedController;
         onEditModeOn += () =>
         {
-            component.OnStartEventSubscribe();
+            _target.OnStartEventSubscribe();
         };
         onEditModeOff += () =>
         {
-            component.OnDestroyEventUnsubscribe();
+            _target.OnDestroyEventUnsubscribe();
         };
-        component.InitializeSettings();
-        component.InitializeComponent(component.settings);
-        component.OnStartPostProcess();
+        InitializeSettingsEditorMode();
     }
 
-    public override void EditMode_Impl()
+    public override void OnInspectorGUI_Impl()
     {
-        var component = target as D;
+        // Read Only
+        EditorGUI.BeginChangeCheck();
+        serializedObject.UpdateIfRequiredOrScript();
 
+        _disabledGroup = true;
+        EditorGUI.BeginDisabledGroup(_disabledGroup);
+        EditorGUILayout.PropertyField(component);
+        EditorGUILayout.PropertyField(settings);
+        EditorGUI.EndDisabledGroup();
+
+        // Assign, Initialize, Open assets
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField($"SettingsSO:");
-        component.settings = EditorGUILayout.ObjectField(component.settings, typeof(U), false) as U;
-        EditorGUILayout.EndHorizontal();
-
-        if (component.settings != null)
+        EditorGUILayout.PropertyField(settingsName);
+        if (GUILayout.Button("Assign & Initialize"))
         {
-            CreateCachedEditor(component.settings, null, ref cachedSettingEditor);
-            cachedSettingEditor.OnInspectorGUI();
+            string assetName = (settingsName.stringValue == "Default" || settingsName.stringValue == string.Empty) ?
+                "DayNightCycleSettings_Default" : settingsName.stringValue;
+            settings.objectReferenceValue = AssetDatabase.LoadAssetAtPath<DayNightCycle_SettingsSO>(DayNightCycle.EDITOR_SETTINGS_FOLDER +
+                $"{assetName}.asset");
+            InitializeSettingsEditorMode();
         }
-
-        EditorGUILayout.Space();
-
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField($"TransitionSize:");
-        transitionSize = EditorGUILayout.Slider(transitionSize, 0f, 1f);
-        bool resetKeyframes = GUILayout.Button("Reset Keyframes");
-        bool readjustKeyframes = GUILayout.Button("Readjust Keyframes");
+        if(GUILayout.Button("Initialize"))
+        {
+            InitializeSettingsEditorMode();
+        }
+        if (GUILayout.Button("Open"))
+        {
+            EditorUtility.OpenPropertyEditor(_target.settings);
+        }
         EditorGUILayout.EndHorizontal();
 
+        // 
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField($"CloneName:");
         cloneName = EditorGUILayout.TextField(cloneName);
-        bool cloneSettingsSO = GUILayout.Button("Clone Settings");
-        if (cloneName == string.Empty)
+        if(GUILayout.Button("Clone Settings"))
         {
-            cloneName = "Clone";
-        }
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField($"SettingsName:");
-        component.settingsName = EditorGUILayout.TextField(component.settingsName);
-        bool reInitializeSettings = GUILayout.Button("ReinitializeSettings");
-        if (component.settingsName == string.Empty)
-        {
-            component.settingsName = "Default";
-        }
-        EditorGUILayout.EndHorizontal();
-
-        if (resetKeyframes)
-        {
-            ResetKeyframesAll();
-        }
-        if (readjustKeyframes)
-        {
-            ReadjustKeyframesAll();
-        }
-        else if(cloneSettingsSO)
-        {
-            U clone = ScriptableObject.Instantiate(component.settings);
-            string path = DayNightCycle.EDITOR_SETTINGS_FOLDER + component.GetRelativeSubfolderPath() + cloneName + ".asset";
+            U clone = Instantiate(_target.settings);
+            string assetName = cloneName == string.Empty ? "Clone" : cloneName;
+            string path = DayNightCycle.EDITOR_SETTINGS_FOLDER + _target.GetRelativeSubfolderPath() + assetName + ".asset";
             AssetDatabase.CreateAsset(clone, path);
-            component.settingsName = cloneName;
-            component.settings = clone;
+            _target.settingsName = cloneName;
+            _target.settings = clone;
         }
-        else if(reInitializeSettings)
+        EditorGUILayout.EndHorizontal();
+
+        if (EditorGUI.EndChangeCheck())
         {
-            
-            component.InitializeSettings();
-            component.InitializeComponent(component.settings);
-            component.OnStartPostProcess();
+            serializedObject.ApplyModifiedProperties();
         }
     }
-    public void ReadjustKeyframesAll()
+
+    public void InitializeSettingsEditorMode()
     {
-        var component = target as D;
-
-        float tSunRise = sharedDayNightCycle.settings.sunriseTime.GetT();
-        float tSunSet = sharedDayNightCycle.settings.sunsetTime.GetT();
-        float[] ts = new float[]
-        {
-                0f,
-                Mathf.Clamp(tSunRise - transitionSize, 0.0f, 1.0f),
-                tSunRise,
-                Mathf.Clamp(tSunRise + transitionSize, 0.0f, 1.0f),
-                0.5f,
-                Mathf.Clamp(tSunSet - transitionSize, 0.0f, 1.0f),
-                tSunSet,
-                Mathf.Clamp(tSunSet + transitionSize, 0.0f, 1.0f),
-                1f
-        };
-        foreach (var field in component.settings.GetType().GetFields())
-        {
-            ReadjustKeyframes(field, ref ts);
-        }
+        _target.InitializeSettings();
+        _target.InitializeComponent(_target.settings);
+        _target.OnStartPostProcess();
     }
-
-    public void ResetKeyframesAll()
-    {
-        var component = target as D;
-
-        float tSunRise = sharedDayNightCycle.settings.sunriseTime.GetT();
-        float tSunSet = sharedDayNightCycle.settings.sunsetTime.GetT();
-        float[] ts = new float[]
-        {
-                0f,
-                Mathf.Clamp(tSunRise - transitionSize, 0.0f, 1.0f),
-                tSunRise,
-                Mathf.Clamp(tSunRise + transitionSize, 0.0f, 1.0f),
-                0.5f,
-                Mathf.Clamp(tSunSet - transitionSize, 0.0f, 1.0f),
-                tSunSet,
-                Mathf.Clamp(tSunSet + transitionSize, 0.0f, 1.0f),
-                1f
-        };
-        foreach (var field in component.settings.GetType().GetFields())
-        {
-            ResetKeyframes(field, ref ts);
-        }
-    }
-    public void ReadjustKeyframes(FieldInfo field, ref float[] ts)
-    {
-        var component = target as D;
-
-        if (field.FieldType == typeof(AnimationCurve))
-        {
-            AnimationCurve curve = field.GetValue(component.settings) as AnimationCurve;
-            for(int i = 0; i < ts.Length; i++)
-            {
-                var key = curve.keys[i];
-                key.time = ts[i];
-            }
-        }
-        else if (field.FieldType == typeof(Gradient))
-        {
-            Gradient gradient = field.GetValue(component.settings) as Gradient;
-            for (int i = 0; i < ts.Length; i++)
-            {
-                if(i % 2 != 0) { continue; }
-                var alphaKey = gradient.alphaKeys[i / 2];
-                var colorKey = gradient.colorKeys[i / 2];
-                alphaKey.time = ts[i];
-                colorKey.time = ts[i];
-            }
-        }
-    }
-
-    public void ResetKeyframes(FieldInfo field, ref float[] ts)
-    {
-        var component = target as D;
-
-        if (field.FieldType == typeof(AnimationCurve))
-        {
-            Keyframe[] keys = new Keyframe[]
-            {
-                        new Keyframe(ts[0], 1.0f),
-                        new Keyframe(ts[1], 1.0f),
-                        new Keyframe(ts[2], 1.0f),
-                        new Keyframe(ts[3], 1.0f),
-                        new Keyframe(ts[4], 1.0f),
-                        new Keyframe(ts[5], 1.0f),
-                        new Keyframe(ts[6], 1.0f),
-                        new Keyframe(ts[7], 1.0f),
-                        new Keyframe(ts[8], 1.0f)
-            };
-            AnimationCurve curve = new AnimationCurve(keys);
-            field.SetValue(component.settings, curve);
-        }
-        else if (field.FieldType == typeof(Gradient))
-        {
-            var gradient = new Gradient();
-            gradient.mode = GradientMode.Blend;
-            gradient.colorSpace = ColorSpace.Linear;
-            gradient.alphaKeys = new GradientAlphaKey[]
-            {
-                        new GradientAlphaKey(1, ts[0]),
-                        new GradientAlphaKey(1, ts[2]),
-                        new GradientAlphaKey(1, ts[4]),
-                        new GradientAlphaKey(1, ts[6]),
-                        new GradientAlphaKey(1, ts[8])
-
-            };
-            gradient.colorKeys = new GradientColorKey[]
-            {
-                        new GradientColorKey(Color.white,ts[0]),
-                        new GradientColorKey(Color.white,ts[2]),
-                        new GradientColorKey(Color.white,ts[4]),
-                        new GradientColorKey(Color.white,ts[6]),
-                        new GradientColorKey(Color.white,ts[8])
-            };
-            field.SetValue(component.settings, gradient);
-        }
-    }
+    
 }
 #endif
