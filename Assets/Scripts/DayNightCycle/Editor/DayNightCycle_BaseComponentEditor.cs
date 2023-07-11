@@ -44,33 +44,33 @@ public abstract class DayNightCycle_BaseComponentEditor<D,T,U> : DayNightCycle_B
         }
 
         EditorGUILayout.Space();
+
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField($"TransitionSize:");
         transitionSize = EditorGUILayout.Slider(transitionSize, 0f, 1f);
-        EditorGUILayout.EndHorizontal();
-        EditorGUILayout.BeginHorizontal();
         bool resetKeyframes = GUILayout.Button("Reset Keyframes");
         bool readjustKeyframes = GUILayout.Button("Readjust Keyframes");
         EditorGUILayout.EndHorizontal();
+
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField($"CloneName:");
         cloneName = EditorGUILayout.TextField(cloneName);
-        EditorGUILayout.EndHorizontal();
         bool cloneSettingsSO = GUILayout.Button("Clone Settings");
         if (cloneName == string.Empty)
         {
             cloneName = "Clone";
         }
+        EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField($"SettingsName:");
         component.settingsName = EditorGUILayout.TextField(component.settingsName);
-        EditorGUILayout.EndHorizontal();
         bool reInitializeSettings = GUILayout.Button("ReinitializeSettings");
         if (component.settingsName == string.Empty)
         {
             component.settingsName = "Default";
         }
+        EditorGUILayout.EndHorizontal();
 
         if (resetKeyframes)
         {
