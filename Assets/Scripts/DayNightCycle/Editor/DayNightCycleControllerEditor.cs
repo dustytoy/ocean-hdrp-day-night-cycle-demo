@@ -26,6 +26,11 @@ public class DayNightCycleControllerEditor : DayNightCycle_BaseEditor
         EditorGUI.BeginChangeCheck();
         serializedObject.UpdateIfRequiredOrScript();
 
+        EditorGUILayout.BeginHorizontal();
+        sharedEditMode = EditorGUILayout.Toggle(sharedEditMode);
+        EditorGUILayout.LabelField("Shared Edit Mode");
+        EditorGUILayout.EndHorizontal();
+
         _enableEdit = EditorGUILayout.BeginToggleGroup("Components", _enableEdit);
         EditorGUI.BeginDisabledGroup(!_enableEdit);
         EditorGUILayout.PropertyField(_components);

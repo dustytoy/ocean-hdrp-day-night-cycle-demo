@@ -1,6 +1,5 @@
 #if UNITY_EDITOR
 
-using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -53,8 +52,8 @@ public abstract class DayNightCycle_BaseComponentEditor<D,T,U> : DayNightCycle_B
         {
             string assetName = (settingsName.stringValue == "Default" || settingsName.stringValue == string.Empty) ?
                 "DayNightCycleSettings_Default" : settingsName.stringValue;
-            settings.objectReferenceValue = AssetDatabase.LoadAssetAtPath<DayNightCycle_SettingsSO>(DayNightCycle.EDITOR_SETTINGS_FOLDER +
-                $"{assetName}.asset");
+            string path = DayNightCycle.EDITOR_SETTINGS_FOLDER + _target.GetRelativeSubfolderPath() + assetName + ".asset";
+            settings.objectReferenceValue = AssetDatabase.LoadAssetAtPath<U>(path);
             InitializeSettingsEditorMode();
         }
         if(GUILayout.Button("Initialize"))
