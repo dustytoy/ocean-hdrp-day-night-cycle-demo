@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotateAngleOffset: 90
   rotateAxis: {x: 1, y: 0, z: 0}
-  shadowDuringDayTime: 0
+  shadowMode: 0
   angularDiameter:
     serializedVersion: 2
     m_Curve:
