@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 2382826158
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: daynight
+      Dependencies: {}

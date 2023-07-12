@@ -1,0 +1,40 @@
+ManifestFileVersion: 0
+CRC: 3218126520
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 2937e1723b73537d499327dfb34f4239
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 4c4222fe7d26c98716a047427cdf56ae
+HashAppended: 0
+ClassTypes:
+- Class: 114
+  Script: {fileID: 11500000, guid: a8904688b9124334ebda2ab59eae4222, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 2a3a226e7e7f7ca45a0dc2b02998c86f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 189fb93ab73234c4b95a854cd3a2747d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7bb6bad9a7fb2484a9bedf4b5fa2dda3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 32d1ee61336155848ba8ac91c7cf01b6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4a452126e4230e34c8f1914267ffb274, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: dfc0077d2a6e79649bd8caaa9dd45410, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: MyTimePerDay
+Assets:
+- Assets/ScriptableObjects/DayNightCycle/DirectionalLight/Sun.asset
+- Assets/ScriptableObjects/DayNightCycle/Sky/Sky.asset
+- Assets/ScriptableObjects/DayNightCycle/DirectionalLight/Moon.asset
+- Assets/ScriptableObjects/DayNightCycle/DayNight.asset
+- Assets/ScriptableObjects/DayNightCycle/LensFlare/SunLensFlare.asset
+- Assets/ScriptableObjects/DayNightCycle/Cloud/Cloud.asset
+- Assets/ScriptableObjects/DayNightCycle/Water/Ocean.asset
+- Assets/ScriptableObjects/DayNightCycle/Fog/Fog.asset
+Dependencies: []
