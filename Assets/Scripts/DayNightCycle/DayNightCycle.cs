@@ -42,6 +42,7 @@ public partial class DayNightCycle : MonoBehaviour
             {
                 _currentTick = value;
                 onTimeChanged?.Invoke(value);
+                ValidateSunriseSunset();
             }
         }
     }
@@ -156,6 +157,7 @@ public partial class DayNightCycle : MonoBehaviour
             currentTick %= MyTimePerDay.TicksPerDay;
             _dayCount++;
         }
+        
     }
    
     public void Initialize(DayNightCycle_SettingsSO so)
@@ -175,6 +177,22 @@ public partial class DayNightCycle : MonoBehaviour
         else
         {
             isDayTime = false;
+        }
+    }
+
+    private void ValidateSunriseSunset()
+    {
+        if ((_currentTick > _sunriseTick && _currentTick <= _sunsetTick) && !isDayTime)
+        {
+            onSunrise?.Invoke(_currentTick);
+            isDayTime = true;
+            Debug.Log($"Sun Rise at {(MyTimePerDay)currentTick}");
+        }
+        if ((_currentTick > _sunsetTick || _currentTick <= _sunriseTick) && isDayTime)
+        {
+            onSunset?.Invoke(_currentTick);
+            isDayTime = false;
+            Debug.Log($"Sun Set at {(MyTimePerDay)_currentTick}");
         }
     }
 }

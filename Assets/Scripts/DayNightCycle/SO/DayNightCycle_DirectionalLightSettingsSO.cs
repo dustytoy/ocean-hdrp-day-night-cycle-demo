@@ -5,6 +5,7 @@ public class DayNightCycle_DirectionalLightSettingsSO : ScriptableObject
 {
     public float rotateAngleOffset;
     public Vector3 rotateAxis;
+    public DayNightCycle_DirectionalLight.ShadowMode shadowMode;
 
     public AnimationCurve angularDiameter;
     public AnimationCurve flareSize;
