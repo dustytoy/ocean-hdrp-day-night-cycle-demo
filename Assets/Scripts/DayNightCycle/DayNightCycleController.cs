@@ -33,16 +33,17 @@ public class DayNightCycleController : MonoBehaviour
     {
         GUI.color = Color.white;
         GUI.backgroundColor = Color.white;
-        
+
         if (displayGUI = GUI.Toggle(new Rect(10f, 0f, 50f, 50f), displayGUI, "GUI"))
         {
-            dayNightCycle.timeMultiplier = Mathf.RoundToInt(GUI.HorizontalSlider(new Rect(10f, 50f, 600f, 50f), dayNightCycle.timeMultiplier, 1, 1000));
-            dayNightCycle.currentTick = (long)(GUI.HorizontalSlider(new Rect(10f, 100f, 600f, 50f), MyTimePerDay.GetT(dayNightCycle.currentTick), 0f, 1f) * MyTimePerDay.TicksPerDay);
-
             MyTimePerDay time = (MyTimePerDay)dayNightCycle.currentTick;
-            GUI.Label(new Rect(10f, 150f, 600f, 100f), $"SunRise: {dayNightCycle.settings.sunriseTime} | Sunset:{dayNightCycle.settings.sunsetTime}\n" +
-                $"Time (t): {time} ({time.GetT()})\n" +
-                $"TimeMultiplier: {dayNightCycle.timeMultiplier}\n");
+            GUI.Label(new Rect(50f, 10f, 200f, 30f), $"TimeMultiplier: {dayNightCycle.timeMultiplier}");
+            dayNightCycle.timeMultiplier = Mathf.RoundToInt(GUI.HorizontalSlider(new Rect(250f, 10f, 300f, 30f), dayNightCycle.timeMultiplier, 1, 1000));
+            GUI.Label(new Rect(50f, 40f, 200f, 30f), $"Time (t): {time} ({time.GetT()})");
+            dayNightCycle.currentTick = (long)(GUI.HorizontalSlider(new Rect(250f, 40f, 300f, 30f), MyTimePerDay.GetT(dayNightCycle.currentTick), 0f, 1f) * MyTimePerDay.TicksPerDay);
+
+            GUI.Label(new Rect(50f, 70f, 500f, 30f), $"SunRise: {dayNightCycle.settings.sunriseTime} ({dayNightCycle.settings.sunriseTime.GetT()}) | " +
+            $"Sunset:{dayNightCycle.settings.sunsetTime} ({dayNightCycle.settings.sunsetTime.GetT()})");
         }
     }
 }
