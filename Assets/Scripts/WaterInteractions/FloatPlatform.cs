@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[DefaultExecutionOrder(101)]
+[DefaultExecutionOrder(200)]
 [RequireComponent(typeof(BoxCollider))]
 public class FloatPlatform : MonoBehaviour
 {

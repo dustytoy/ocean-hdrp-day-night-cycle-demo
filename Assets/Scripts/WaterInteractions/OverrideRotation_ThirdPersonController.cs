@@ -1,20 +1,25 @@
 using StarterAssets;
 using UnityEngine;
 
-[DefaultExecutionOrder(202)]
+[DefaultExecutionOrder(102)]
 public class OverrideRotation_ThirdPersonController : MonoBehaviour
 {
     public ThirdPersonController controller;
     private FloatPlatform _platform;
-    private void Update()
+    private float yAngle;
+    private void LateUpdate()
     {
-        if (controller == null || !controller.Grounded)
+        //Debug.Log($"Local: {controller.transform.localEulerAngles}");
+        //Debug.Log($"{controller.transform.eulerAngles}");
+        if (!controller.Grounded || _platform == null)
         {
             controller.transform.rotation = Quaternion.AngleAxis(controller.transform.eulerAngles.y, Vector3.up);
             return;
         }
         GroundedCheck();
-        //controller.transform.rotation = Quaternion.AngleAxis(controller.transform.eulerAngles.y, Vector3.up) * _platform.resultFromFitToWaterSurface.rotatedBy;
+        //controller.transform.rotation = Quaternion.AngleAxis(controller.transform.eulerAngles.y, controller.contactNormal);
+        controller.transform.rotation = Quaternion.AngleAxis(controller.transform.eulerAngles.y, controller.contactNormal) * 
+            Quaternion.FromToRotation(Vector3.up, controller.contactNormal);
     }
 
     private void GroundedCheck()

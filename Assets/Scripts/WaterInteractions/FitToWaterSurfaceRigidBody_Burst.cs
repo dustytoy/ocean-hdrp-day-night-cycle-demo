@@ -6,13 +6,13 @@ using UnityEngine.Rendering.HighDefinition;
 
 // Reference from https://docs.unity3d.com/Packages/com.unity.render-pipelines.high-definition@14.0/manual/WaterSystem-scripting.html
 [DefaultExecutionOrder(100)]
-public class FitToWaterSurface_Burst : MonoBehaviour
+public class FitToWaterSurfaceRigidBody_Burst : MonoBehaviour
 {
     // Public parameters
     public WaterSurface waterSurface = null;
 
     // List of transform to move
-    public Transform[] moveTransform;
+    public Rigidbody[] bodies;
 
     // Sway behaviour 
     public bool sway;
@@ -31,7 +31,7 @@ public class FitToWaterSurface_Burst : MonoBehaviour
     void Start()
     {
         // Allocate the buffers
-        int count = moveTransform.Length;
+        int count = bodies.Length;
         _targetPositionBuffer = new NativeArray<float3>(count, Allocator.Persistent);
         _heightBuffer = new NativeArray<float>(count, Allocator.Persistent);
         _errorBuffer = new NativeArray<float>(count, Allocator.Persistent);
@@ -39,19 +39,22 @@ public class FitToWaterSurface_Burst : MonoBehaviour
         _stepCountBuffer = new NativeArray<int>(count, Allocator.Persistent);
     }
 
-    void Update()
+    private void FixedUpdate()
     {
-        if (waterSurface == null || moveTransform == null || moveTransform.Length == 0)
+
+        if (waterSurface == null || bodies == null || bodies.Length == 0)
             return;
         // Try to get the simulation data if available
         WaterSimSearchData simData = new WaterSimSearchData();
         if (!waterSurface.FillWaterSearchData(ref simData))
             return;
 
+
+
         // Fill the input positions
-        int numElements = moveTransform.Length;
+        int numElements = bodies.Length;
         for (int i = 0; i < numElements; ++i)
-            _targetPositionBuffer[i] = moveTransform[i].transform.position;
+            _targetPositionBuffer[i] = bodies[i].position;
 
         // Prepare the first band
         WaterSimulationSearchJob searchJob = new WaterSimulationSearchJob();
@@ -77,22 +80,17 @@ public class FitToWaterSurface_Burst : MonoBehaviour
         // Fill the input positions
         for (int i = 0; i < numElements; ++i)
         {
-            var floatOverride = moveTransform[i].GetComponent<FloatConfigOverride>();
+            var floatOverride = bodies[i].GetComponent<FloatConfigOverride>();
             var heightOffset = floatOverride == null ? 0 : floatOverride.heightOffset;
-
-            Vector3 newPos = new Vector3(moveTransform[i].transform.position.x, _heightBuffer[i] + heightOffset, moveTransform[i].transform.position.z);
-            Quaternion newRot = Quaternion.AngleAxis(moveTransform[i].eulerAngles.y, Vector3.up) *
+            Vector3 newPos = new Vector3(bodies[i].position.x, _heightBuffer[i] + heightOffset, bodies[i].position.z);
+            Quaternion newRot = Quaternion.AngleAxis(bodies[i].transform.eulerAngles.y, Vector3.up) *
                 Quaternion.AngleAxis(Mathf.Cos(Time.time * swaySpeed) * swayStrength, Vector3.right) *
                 Quaternion.AngleAxis(Mathf.Sin(Time.time * swaySpeed) * swayStrength, Vector3.forward);
-            moveTransform[i].transform.position = newPos;
-            if (sway)
+            if (!sway)
             {
-                moveTransform[i].rotation = newRot;
+                newRot = Quaternion.AngleAxis(bodies[i].transform.eulerAngles.y, Vector3.up);
             }
-            else
-            {
-                moveTransform[i].rotation = Quaternion.AngleAxis(moveTransform[i].eulerAngles.y, Vector3.up);
-            }
+            bodies[i].Move(newPos, newRot);
         }
     }
 

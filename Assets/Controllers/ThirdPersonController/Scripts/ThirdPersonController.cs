@@ -98,6 +98,13 @@ namespace StarterAssets
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
 
+        // unstable platform
+        private RaycastHit[] _hits = new RaycastHit[1];
+        public Vector3 contactPoint;
+        public Vector3 contactNormal;
+        public float yAngle;
+        public Vector3 motion;
+
 #if ENABLE_INPUT_SYSTEM 
         private PlayerInput _playerInput;
 #endif
@@ -166,6 +173,20 @@ namespace StarterAssets
             CameraRotation();
         }
 
+        //private void FixTransform()
+        //{
+        //    if (Grounded)
+        //    {
+        //        transform.position = contactPoint;
+        //        if (Grounded)
+        //        {
+        //            transform.position = contactPoint + contactNormal * 0.1f;
+        //            transform.rotation = Quaternion.AngleAxis(yAngle, contactNormal) *
+        //                Quaternion.FromToRotation(Vector3.up, contactNormal);
+        //        }
+        //    }
+        //}
+
         private void AssignAnimationIDs()
         {
             _animIDSpeed = Animator.StringToHash("Speed");
@@ -183,6 +204,16 @@ namespace StarterAssets
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
                 QueryTriggerInteraction.Ignore);
 
+            if(Grounded)
+            {
+                Vector3 origin = transform.position + Vector3.up * 10f;
+                if(Physics.RaycastNonAlloc(origin, Vector3.down, _hits, 20f, GroundLayers,QueryTriggerInteraction.Ignore) > 0)
+                {
+                    Debug.DrawLine(origin, origin + Vector3.down * 20f);
+                    contactPoint = _hits[0].point;
+                    contactNormal = _hits[0].normal;
+                }
+            }
             // update animator if using character
             if (_hasAnimator)
             {
@@ -196,7 +227,7 @@ namespace StarterAssets
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
                 //Don't multiply mouse input by Time.deltaTime;
-                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime * DayNightCycle.Instance.timeMultiplier;
 
                 _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
@@ -235,7 +266,7 @@ namespace StarterAssets
                 // creates curved result rather than a linear one giving a more organic speed change
                 // note T in Lerp is clamped, so we don't need to clamp our speed
                 _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
-                    Time.deltaTime * SpeedChangeRate);
+                    Time.deltaTime * SpeedChangeRate * DayNightCycle.Instance.timeMultiplier);
 
                 // round speed to 3 decimal places
                 _speed = Mathf.Round(_speed * 1000f) / 1000f;
@@ -245,7 +276,7 @@ namespace StarterAssets
                 _speed = targetSpeed;
             }
 
-            _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
+            _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate * DayNightCycle.Instance.timeMultiplier);
             if (_animationBlend < 0.01f) _animationBlend = 0f;
 
             // normalise input direction
@@ -259,7 +290,7 @@ namespace StarterAssets
                                   _mainCamera.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
-
+                yAngle = rotation;
                 // rotate to face input direction relative to camera position
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
@@ -268,8 +299,16 @@ namespace StarterAssets
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
             // move the player
-            _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            motion = targetDirection.normalized * (_speed * Time.deltaTime * DayNightCycle.Instance.timeMultiplier) +
+                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime * DayNightCycle.Instance.timeMultiplier;
+            _controller.Move(motion);
+
+            //if(Grounded)
+            //{
+            //    transform.position = contactPoint + contactNormal * 0.01f;
+            //    transform.rotation = Quaternion.AngleAxis(transform.eulerAngles.y, contactNormal) *
+            //        Quaternion.FromToRotation(Vector3.up, contactNormal);
+            //}
 
             // update animator if using character
             if (_hasAnimator)
@@ -315,7 +354,7 @@ namespace StarterAssets
                 // jump timeout
                 if (_jumpTimeoutDelta >= 0.0f)
                 {
-                    _jumpTimeoutDelta -= Time.deltaTime;
+                    _jumpTimeoutDelta -= Time.deltaTime * DayNightCycle.Instance.timeMultiplier;
                 }
             }
             else
@@ -326,7 +365,7 @@ namespace StarterAssets
                 // fall timeout
                 if (_fallTimeoutDelta >= 0.0f)
                 {
-                    _fallTimeoutDelta -= Time.deltaTime;
+                    _fallTimeoutDelta -= Time.deltaTime * DayNightCycle.Instance.timeMultiplier;
                 }
                 else
                 {
@@ -344,7 +383,7 @@ namespace StarterAssets
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
             if (_verticalVelocity < _terminalVelocity)
             {
-                _verticalVelocity += Gravity * Time.deltaTime;
+                _verticalVelocity += Gravity * Time.deltaTime * DayNightCycle.Instance.timeMultiplier;
             }
         }
 
@@ -367,6 +406,13 @@ namespace StarterAssets
             Gizmos.DrawSphere(
                 new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
                 GroundedRadius);
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(contactPoint, 1f);
+            Gizmos.DrawLine(contactPoint, contactPoint + contactNormal * 2f);
         }
 
         private void OnFootstep(AnimationEvent animationEvent)

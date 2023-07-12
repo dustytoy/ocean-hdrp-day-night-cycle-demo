@@ -17,11 +17,11 @@ public class OverrideHeight_FirstPersonController : MonoBehaviour
     private void GroundedCheck()
     {
         // set sphere position, with offset
-        Vector3 spherePosition = new Vector3(controller.transform.position.x, controller.transform.position.y - 0.0001f,
+        Vector3 spherePosition = new Vector3(controller.transform.position.x, controller.transform.position.y - controller.GroundedOffset,
             controller.transform.position.z);
-        var colliders = Physics.OverlapSphere(spherePosition, 0.00005f, controller.GroundLayers,
+        var colliders = Physics.OverlapSphere(spherePosition, controller.GroundedRadius, controller.GroundLayers,
             QueryTriggerInteraction.Ignore);
-        if(colliders != null && colliders.Length > 0)
+        if (colliders != null && colliders.Length > 0)
         {
             _platform = colliders[0].GetComponent<FloatPlatform>();
         }
